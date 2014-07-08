@@ -1,5 +1,5 @@
 """
-facebook_crawl_wrangle
+facebook_crawl_wrangle.py
 Takes Facebook crawled data and adds it to the overall articles database
 """
 
@@ -8,7 +8,7 @@ import options
 reload(options)
 from general_functions import *
 
-articles = load_pickle(options.article_path)
+articles = load_pickle(options.current_article_path)
 fb = load_pickle(options.facebook_stats_path)
 
 for f in fb:
@@ -19,4 +19,4 @@ for a in articles:
 	if 'facebook' not in articles[a]:
 		articles[a]['facebook'] = {'days':'Not extracted', 'snapshot_of_total':'Not extracted'}
 
-save_pickle(articles, options.article_path)
+save_pickle(articles, options.current_article_path)

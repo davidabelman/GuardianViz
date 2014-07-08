@@ -1,5 +1,6 @@
 """
 general_functions.py
+General functions used within project
 """
 
 

@@ -1,8 +1,8 @@
 """
 guardian_link_crawl
 Goes through articles and requests article by article from the Guardian to collect data on the related articles and story packages
-Pulls any related stories etc looking both into the future and into the past.
-We will later filter out ones looking into the future, and only build our graph looking backwards (i.e. rebuild the future looking ones via backward looking ones)
+Pulls any related stories and story package data looking both into the future and into the past.
+We may later filter out ones looking into the future, and only build our graph looking backwards (i.e. rebuild the future looking ones via backward looking ones)
 """
 
 import urllib2
@@ -17,7 +17,7 @@ import random
 from general_functions import *
 
 
-articles = load_pickle(options.article_path)
+articles = load_pickle(options.current_article_path)
 guardian_links = load_pickle(options.guardian_links_path)
 
 # Will look something like this:
@@ -71,4 +71,5 @@ for a in articles:
 			time.sleep( random.randint(min_wait*10,max_wait*10)*1.0/10 )
 
 # Final save pickle
+print "We have completed pulling all data required in this session."
 save_pickle ( guardian_links, options.guardian_links_path )

@@ -1,5 +1,5 @@
 """
-Testing graphing
+Testing graphing capabilities
 """
 
 import pickle

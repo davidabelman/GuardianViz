@@ -1,3 +1,9 @@
+"""
+Takes raw data pulled from main guardian crawl (guardian_main_crawl.py).
+Puts this data into dictionary format, with keys as 'id'.
+This dict is itself saved as a pickle.
+"""
+
 import pickle
 import options
 reload(options)
@@ -19,7 +25,7 @@ def extract_internal_links(HTML):
 
 # Load data, in the format of a big list
 raw_data = load_pickle(options.raw_pickle_path)
-articles = load_pickle(options.article_path)
+articles = load_pickle(options.current_articles_path)
 
 
 # Loop through requests, and create dict by article ID. Can rewrite or not rewrite (set in options.py)
@@ -109,26 +115,6 @@ for request in raw_data:
 print "Overall we have %s articles in the collection" %(len(articles))
 save_pickle (articles, options.article_path)
 
-# Small subset of data for testing purposes
-print "Creating a small subset with %s articles" %(options.article_subset_size)
-count = 0
-small = {}
-for a in articles:
-	if count>options.articles_subset_size:
-		save_pickle (small, options.article_subset_path)
-		break
-	small[a] = articles[a]
-	count += 1
 
-# UK subset of data for testing purposes
-print "Creating a UK subset"
-uk = {}
-for a in articles:
-	if 'UK news' in articles[a]['tags']:
-		uk[a] = articles[a]
-save_pickle (uk, options.articles_uk_path)
-
-# Output a sample article for iPython testing purposes
-#sample_article = raw_data[0]['response']['results'][0]
 
 

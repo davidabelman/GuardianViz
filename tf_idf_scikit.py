@@ -1,3 +1,8 @@
+"""
+This file calcaultes TF-IDF values for articles, and saves them as extra key entries within article dictionary
+Within options file we can specify the level of data we would like to use within TF-IDF
+"""
+
 import pickle
 import options
 reload(options)
@@ -76,28 +81,29 @@ def create_stopword_list(extra_words):
 	return frozenset(original+extra_words)
 
 # Load the articles
-articles_path = options.articles_uk_path
-articles = load_pickle(articles_path)
+articles = load_pickle(options.current_articles_path)
+print len(articles)
 stopwords = create_stopword_list(extra_words = options.tfidf_extra_stopwords)
+length = options.tf_idf_list_length
 
 if options.tfidf_tags:
 	print "Calculating TFIDF for tags..."
-	articles = add_tfidf ( articles, combine_keys = ['tags'], output_title = 'tfidf_tags', n=20, stopwords=stopwords )
+	articles = add_tfidf ( articles, combine_keys = ['tags'], output_title = 'tfidf_tags', n=length, stopwords=stopwords )
 if options.tfidf_headline:
 	print "Calculating TFIDF for tags, headline..."
-	articles = add_tfidf ( articles, combine_keys = ['tags','headline'], output_title = 'tfidf_headline', n=20, stopwords=stopwords )
+	articles = add_tfidf ( articles, combine_keys = ['tags','headline'], output_title = 'tfidf_headline', n=length, stopwords=stopwords )
 if options.tfidf_standfirst:
 	print "Calculating TFIDF for tags, headline, standfirst..."
-	articles = add_tfidf ( articles, combine_keys = ['tags','headline','standfirst'], output_title = 'tfidf_standfirst', n=20, stopwords=stopwords )
+	articles = add_tfidf ( articles, combine_keys = ['tags','headline','standfirst'], output_title = 'tfidf_standfirst', n=length, stopwords=stopwords )
 if options.tfidf_body:
 	print "Calculating TFIDF for tags, headline, standfirst, body..."
-	articles = add_tfidf ( articles, combine_keys = ['tags','headline','standfirst', 'body'], output_title = 'tfidf_body', n=20, stopwords=stopwords )
+	articles = add_tfidf ( articles, combine_keys = ['tags','headline','standfirst', 'body'], output_title = 'tfidf_body', n=length, stopwords=stopwords )
 
 # Print some example results just to sanity check
 print_results(articles, 'tfidf_headline')
 
 # Save pickle with TF-IDF data added
-save_pickle( articles, articles_path )
+save_pickle( articles, options.current_articles_path )
 
 
 

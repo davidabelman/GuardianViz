@@ -58,8 +58,8 @@ data_pickle_path = options.raw_pickle_path
 # Set up the parameters
 main = "http://beta.content.guardianapis.com/world?"
 api_key = "api-key=explorer"
-from_date = "from-date="+options.opencrawl_from_date
-to_date = "to-date="+options.opencrawl_to_date
+from_date = "from-date="+options.main_guardian_crawl_from_date
+to_date = "to-date="+options.main_guardian_crawl_to_date
 use_date = "use-date=published"
 order_by = "order-by=newest"
 page_size = "page-size=76"
@@ -88,14 +88,13 @@ total_pages = how_many_pages()
 
 # Open up the pickles
 data_store = load_pickle(data_pickle_path)
-#total_calls_today = pickle.load( open( "api_calls_by_day.p", "rb" ) )
 
 #for i in range(total_pages):
 for i in range(total_pages):
 
 	# Sleep for random time
-	min_wait = 2
-	max_wait = 14
+	min_wait = options.main_guardian_crawl_min_wait
+	max_wait = options.main_guardian_crawl_max_wait
 	time.sleep( random.randint(min_wait*10,max_wait*10)*1.0/10 )
 	page_number = i+1
 	print "Now pulling page number %s/%s" %(page_number, total_pages)

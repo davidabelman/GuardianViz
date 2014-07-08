@@ -9,7 +9,7 @@ import options
 reload(options)
 from general_functions import *
 
-articles = load_pickle(options.articles_uk_path)
+articles = load_pickle(options.current_articles_path)
 guardian_links = load_pickle(options.guardian_links_path)
 
 # Loop through list of Guardian articles 1 by 1
@@ -40,4 +40,4 @@ for id_ in articles:
 	if 'story_package' not in articles[id_]:
 		articles[id_]['story_package'] = "Not extracted"
 
-save_pickle(articles, options.articles_uk_path)
+save_pickle(articles, options.current_articles_path)

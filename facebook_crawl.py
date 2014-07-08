@@ -1,5 +1,5 @@
 """
-Gets Facebook like stats for articles and save to a separate pickle
+Gets Facebook 'like' stats for articles, and saves these to a separate pickle.
 """
 import pickle
 import options
@@ -36,7 +36,7 @@ def get_facebook_likes(article_id):
 		return "Unknown (failed request)"
 
 
-articles = load_pickle(options.article_path)
+articles = load_pickle(options.current_article_path)
 fb = load_pickle(options.facebook_stats_path)
 
 # For each article:
