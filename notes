@@ -1,0 +1,19 @@
+Create git repo (online)
+Create virtualenv
+Add stemming to tf-idf
+Create SOM (b) just by connecting all with all and playing with settings in Gephi
+Create test to measure recall of TF-IDF vs. related content / story bunches so I can assess how well TF-IDF is doing
+Create function to filter articles by variables (e.g. date ranges, tags, etc.)
+Tidy code and create functionality so that all versions are saved in a folder (e.g. UK, date-range, etc.)
+
+
+
+
+
+
+Log of all crawled:
+===================
+Jan 2013-Jun 2014:
+guardian --> world
+guardian_links --> world (tag = UK news)
+facebook_total --> world (tag = UK news)
