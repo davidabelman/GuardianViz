@@ -43,13 +43,45 @@ def rank_cluster_posns(positions):
 	"""
 	return_dict = {}
 	x_dim = zip(*positions)[0]
-	t = zip(x_dim, range(len(x_dim)))
+	y_dim = zip(*positions)[1]
+	combined = []
+	for i in range(len(x_dim)):
+		combined.append(x_dim[i]+y_dim[i])
+	t = zip(combined, range(len(x_dim)))
 	mapped = sorted(t, key=lambda x: x[0])
 	clusters = range(len(x_dim))
 	for i in range(len(mapped)):
 		return_dict[clusters[i]]=mapped[i][1]
 	return return_dict
 
+
+def fill_out_rectangle(plot_list):
+	"""
+	Adds extra elements to plot list to ensure we have an equal sized grid
+	Finds largest pca1group value, counts it, and counts second largest pca1group value
+	Then adds grey squares for these
+	"""
+	maximal = max([entry['x'] for entry in plot_list])
+	number_to_increase = len([entry['x'] for entry in plot_list if entry['x']==maximal])
+	full_number = len([entry['x'] for entry in plot_list if entry['x']==maximal-1])
+	for x in range(full_number-number_to_increase):
+		plot_list.append({
+		'index' : '',
+		'id' : '',
+		'x' : full_number,
+		'y' : full_number-x-1,
+		'tags' : ['None'],
+		'fb' : a['facebook']['snapshot_of_total'] if a['facebook']['snapshot_of_total']!='Not extracted' else 5,
+		'url' : '#',
+		'img' : '#',
+		'headline' : '',
+		'standfirst' : '',
+		'cluster' : '1',
+		#'r' : str(cluster+1), #k_centres_2d[cluster][0]+np.random.randint(-10,10)*1.0/90,
+		#'g' : 100, #np.random.randint(140,150),
+		#'b' : str(cluster) #k_centres_2d[cluster][1]+np.random.randint(-10,10)*1.0/90,
+		})
+	return plot_list
 
 # Load articles and stopwords
 articles = load_pickle(options.current_articles_path)
@@ -71,7 +103,7 @@ o1, o2 = zip(*output)[0], zip(*output)[1]  # Separate out the PCA components int
 
 # Apply k-means clustering on the TFIDF output
 from sklearn.cluster import KMeans
-k_means = KMeans(init='k-means++', n_clusters=5, n_init=10)
+k_means = KMeans(init='k-means++', n_clusters=6, n_init=10)
 k_means.fit(tfidf)
 k_means_labels = k_means.labels_
 k_centres_2d = pca.fit_transform(k_means.cluster_centers_)
@@ -87,7 +119,7 @@ if plot_pca:
 # Create an N*N block where N is ceil(sqrt) of total number of articles
 import pandas
 import numpy as np
-N = np.ceil(np.sqrt(len(output)))
+N = np.floor(np.sqrt(len(output)))
 df = pandas.DataFrame([o1,o2]).transpose()
 df.columns = ['pca1','pca2']
 
@@ -104,6 +136,7 @@ df['pca2group'] = df['pca2group'].apply(lambda x: x%N)
 print "Here is the PCA dataframe with the grouped (%s x %s) data:" %(N, N)
 print df[0:35]
 print "etc..."
+print df
 
 # Extract data from dataframe to JSON for visualisation
 plot_list = []
@@ -117,8 +150,8 @@ for i in range(len(df)):
 	plot_list.append({
 		'index' : str(index),
 		'id' : id_,
-		'x' : pca2,
-		'y' : pca1,
+		'x' : pca1,
+		'y' : pca2,
 		'tags' : a['tags'],
 		'fb' : a['facebook']['snapshot_of_total'] if a['facebook']['snapshot_of_total']!='Not extracted' else 5,
 		'url' : a['url'],
@@ -126,10 +159,10 @@ for i in range(len(df)):
 		'headline' : a['headline'],
 		'standfirst' : a['standfirst'],
 		'cluster' : str(cluster_map[cluster]),
-		'r' : str(cluster+1), #k_centres_2d[cluster][0]+np.random.randint(-10,10)*1.0/90,
-		'g' : 100, #np.random.randint(140,150),
-		'b' : str(cluster) #k_centres_2d[cluster][1]+np.random.randint(-10,10)*1.0/90,
 		})
+
+# Add any remaining squares in grey to make sure we have a rectangle
+plot_list = fill_out_rectangle(plot_list)
 
 import json
 j = json.dumps(plot_list)

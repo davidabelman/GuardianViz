@@ -1,0 +1,28 @@
+#options .panel-heading {
+	background: #222 !important;
+	color: #8D8D8D !important;
+}
+
+#options {
+	border: 0px !important;
+	z-index:2 !important;
+}
+
+#options .panel-body {
+	background: #F5F5F5 !important;
+}
+
+#options .panel-footer {
+	text-align: right !important;
+	font-size: 10px !important;
+}
+
+.padder {
+	padding: 30px;
+}
+
+#newspaper_text {
+	padding-right: 60px;
+}
+
+#grid rect { cursor: pointer; cursor: hand; }
