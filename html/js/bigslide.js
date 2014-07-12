@@ -10,7 +10,7 @@
       'menu': ('#options'),
       'push': ('.push'),
       'side': 'right',
-      'menuWidth': '15.625em',
+      'menuWidth': '22em',
       'speed': '300'
     }, options);
 
@@ -24,7 +24,7 @@
       'top': '10%',
       'bottom': '0',
       'width': settings.menuWidth,
-      'height': '100%'
+      'height': '75%'
     };
 
     var animateSlide = {
@@ -47,12 +47,14 @@
       menu._state = 'open';
       menu.css(settings.side, '0');
       push.css(settings.side, width);
+      $('.glyphicon-hand-left').replaceWith("<span class='glyphicon glyphicon-hand-right'></span>")
     };
 
     menu.close = function() {
       menu._state = 'closed';
       menu.css(settings.side, '-' + width);
       push.css(settings.side, '0');
+      $('.glyphicon-hand-right').replaceWith("<span class='glyphicon glyphicon-hand-left'></span>")
     };
 
     menuLink.on('click.bigSlide', function(e) {

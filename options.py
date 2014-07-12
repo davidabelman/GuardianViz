@@ -13,7 +13,7 @@ path_choice = {
 
 	'sample' : "data/articles_subset.p",
 }
-current_articles_path = path_choice [ 'uk_1_wk' ]
+current_articles_path = path_choice [ 'uk' ]
 
 # Raw data from Guardian
 raw_pickle_path = "data/world_data.p"
@@ -43,6 +43,6 @@ tfidf_print_test_on = True
 tfidf_tags = True
 tfidf_headline = True
 tfidf_standfirst = True
-tfidf_body = False
+tfidf_body = True
 tfidf_extra_stopwords = ['video', 'eyewitness', 'pictures']
-tf_idf_list_length = 100
+tf_idf_list_length = 20

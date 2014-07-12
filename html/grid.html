@@ -24,6 +24,8 @@
 
 	    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 		<script type="text/javascript" src="d3/d3.v3.js"></script>
+		<script type="text/javascript" src="js/bootstrap-select.js"></script>
+    	<link rel="stylesheet" type="text/css" href="css/bootstrap-select.css">
 		
 		<script src="js/grid.js"></script>
 		<script src="js/bigslide.js"></script>
@@ -56,17 +58,82 @@
 
 	    <nav id="options" class="panel panel-primary" role="navigation">
 	      <div class="panel-heading">
-		    <h3 class="panel-title">Options</h3>
+		    <h3 class="panel-title"></h3>
 		  </div>
 	    	<div class="panel-body">
-			    <p>Colour</p>
-			    <ul>
-			    	<li><a>Pagerank</a></li>
-			    	<li><a>News topic</a></li>
-			    </ul>
+				    <h4>Time-span</h4>
+				    
+						    <input type="radio" name="dayrange" value="2" class="redraw_viz">
+						    <span>2 days</span>
+						    
+						    <input type="radio" name="dayrange" value="7" class="redraw_viz" checked='checked'>
+						    <span>7 days</span>
+
+						    <input type="radio" name="dayrange" value="30" class="redraw_viz">
+						    <span>30 days</span>
+					
+				    
+
+				    <h4 class='add_space'>Tags</h4>	
+				    
+						    <input type="radio" name="tag" value="world" class="redraw_viz" checked='checked'>
+						    <span>World news</span>
+						    
+						    <input type="radio" name="tag" value="uk" class="redraw_viz" >
+						    <span>UK news</span>
+					
+
+
+				    <h4 class='add_space'>Shapes</h4>
+					     
+					     	<input type="radio" name="corner_radius" value=100 id='rect_to_circle' checked='checked'>
+						    <span>Circles</span>
+
+						    <input type="radio" name="corner_radius" value=0 id='circle_to_rect' >
+						    <span>Squares</span>
+						
+						    
+
+					<h4 class='add_space'>Colours</h4>
+					     
+						    <input type="radio" name='block_colours' value="cluster" class = 'recolour_viz' checked='checked' >
+						    <span>Topic</span>
+						    
+						    <input type="radio" name='block_colours' value="recency" class='recolour_viz'>
+						    <span>Recency</span>
+
+						    <input type="radio" name='block_colours' value="fb" class = 'recolour_viz'>
+						    <span>Popularity</span>
+						 
+
+					<h4 class='add_space'>Labels</h4>
+					     
+						    <input type="radio" name='tag_visibility' value="visible" id='tag_show' checked='checked'>
+						    <span>Guardian Tag</span>
+
+						    <input type="radio" name='tag_visibility' value="none" id='tag_hide'>
+						    <span>None</span>
+
+					<h4 class='add_space'></h4>
+						 
+				
+
 		  	</div>
-			<div class="panel-footer">Close >></div>
+			<div class="panel-footer" href="#options" class="options-link">
+				<a href="#options" class="options-link">
+					<!-- Close
+					<span class="glyphicon glyphicon-hand-right"></span> -->
+					
+				</a>
+			</div>
 		    
+		<div class='floating-menu'>
+			<a href="#options" class="options-link">
+				<span class="glyphicon glyphicon-hand-left"></span>
+				Visualisation options
+			</a>
+		</div>
+
 		</nav>
 		
 		<div class='container'>
@@ -79,15 +146,23 @@
 				</div>
 
 				<div class="col-sm-12 col-lg-6">
-					<div id='newspaper_text' data-spy="affix" class='affix' class="col-sm-11 col-lg-4">
+					<div id='newspaper_text_and_options' data-spy="affix" class='affix' class="col-sm-11 col-lg-4">
+						
+							<h5 id='date' >
+								
+							</h5>
+
 							<h3 id='headline'>			
 								Hover over the visualisation
 							</h3>
 
 							<p id='standfirst' >
-								Try changing the options above.
+								Click on a block to open the article in a new window. All stories and data from <a href='http://www.theguardian.com'>theguardian.com</a>.
 							</p>
-						</div>
+
+							
+						
+					</div>
 				</div>
 
 
@@ -104,6 +179,50 @@
 	    $(document).ready(function() {
 	        $('.options-link').bigSlide();
 	    });
+	    $('.selectpicker').selectpicker();
+
+	    // Draw first bunch of squares
+	    json = draw_squares()
+
+
+	    //Removing and adding labels
+	    var remove_labels = function() {
+			$('svg text').hide('medium')
+		}
+		$('#tag_hide').click( function() {remove_labels()} )
+
+		var show_labels = function() {
+			$('svg text').show('medium')
+		}
+		$('#tag_show').click( function() {show_labels()} )
+
+		//Converting circles to squares and back
+		var circle_to_rect = function() {
+			d3.selectAll("svg rect")
+			    .transition()
+			    .duration(1000)
+			    .attr("rx",100)
+			}
+		$('#rect_to_circle').click( function() {circle_to_rect()} )
+		var rect_to_circle = function() {
+			d3.selectAll("svg rect")
+			    .transition()
+			    .duration(1000)
+			    .attr("rx",0)
+			}
+		$('#circle_to_rect').click( function() {rect_to_circle()} )
+
+		//Loading different datasets
+		$('.redraw_viz').click( function() {
+			remove_SVG_draw_squares();
+		} )
+
+
+		//Altering the colours different datasets
+		$('.recolour_viz').click( function() {
+			colourByVariable( $('input[name=block_colours]:checked').val() )
+		} )
+
 	</script>
 </html>
 

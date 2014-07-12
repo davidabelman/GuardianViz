@@ -25,6 +25,15 @@ def save_pickle(data, filename, silent = False):
 		print "Saving pickle (%s)" %(filename)
 	pickle.dump( data, open( filename, "wb" ) )
 
+def export_dict_to_json(data, path):
+	"""
+	Write a python element to JSON
+	"""
+	import json
+	j = json.dumps(data)
+	with open(path, 'w') as file_to_write:
+		file_to_write.write(j)
+
 def convert_str_to_date(string):
 	"""
 	Converts a string of format u'2013-06-24T23:06:02Z' into datetime.date (ignores time)
@@ -45,3 +54,11 @@ def create_REST_request(main, parameters = []):
 		main += p+"&"
 	print "Generated the following request: %s" %(main[:-1])
 	return main[:-1]
+
+def create_stopword_list(extra_words):
+	"""
+	Creates stopword list (adds extra words to original English set)
+	"""
+	from sklearn.feature_extraction.text import TfidfVectorizer
+	original = list(TfidfVectorizer.get_stop_words(TfidfVectorizer(stop_words='english')))
+	return frozenset(original+extra_words)

@@ -72,17 +72,8 @@ def print_results(articles, key):
 				print thing
 			print "\n\n"
 
-def create_stopword_list(extra_words):
-	"""
-	Creates stopword list (adds extra words to original English set)
-	"""
-	from sklearn.feature_extraction.text import TfidfVectorizer
-	original = list(TfidfVectorizer.get_stop_words(TfidfVectorizer(stop_words='english')))
-	return frozenset(original+extra_words)
-
 # Load the articles
 articles = load_pickle(options.current_articles_path)
-print len(articles)
 stopwords = create_stopword_list(extra_words = options.tfidf_extra_stopwords)
 length = options.tf_idf_list_length
 

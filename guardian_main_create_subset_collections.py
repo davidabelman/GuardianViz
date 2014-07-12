@@ -33,7 +33,7 @@ save_pickle (uk, options.path_choice['uk'])
 import datetime
 print "Creating 1 week of UK articles"
 uk_1_wk = {}
-for a in articles:
-	if articles[a]['date'] > datetime.datetime(2014, 6, 9, 0, 0) and articles[a]['date'] < datetime.datetime(2014, 6, 17, 0, 0):
+for a in uk:
+	if articles[a]['date'] > datetime.datetime(2014, 6, 1, 0, 0) and articles[a]['date'] < datetime.datetime(2014, 6, 20, 0, 0):
 		uk_1_wk[a] = articles[a]
 save_pickle (uk_1_wk, options.path_choice['uk_1_wk'])
