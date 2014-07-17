@@ -6,7 +6,6 @@ import opencrawl
 reload(opencrawl)
 import opencrawl_wrangle
 
-
 pipeline = [
 				#opencrawl, 				# Crawls Guardian articles to get main info available (not related stories)
 				#opencrawl_wrangle,  		# Cleans the Guardian article data into dictionary format

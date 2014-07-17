@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<NAF version="v3" xml:lang="en">
+  <nafHeader>
+    <fileDesc creationtime="2014"/>
+    <public publicId="nr_demo_text" uri="nr_demo_text"/>
+    <linguisticProcessors layer="srl">
+      <lp beginTimestamp="2014-07-13T15:50:53+0200" endTimestamp="2014-07-13T15:51:12+0200" name="ixa-pipe-srl-en" version="1.0"/>
+    </linguisticProcessors>
+    <linguisticProcessors layer="text">
+      <lp beginTimestamp="2014-07-13T15:50:42+0200" endTimestamp="2014-07-13T15:50:42+0200" name="ixa-pipe-tok-en" version="1.5.0"/>
+    </linguisticProcessors>
+    <linguisticProcessors layer="coreferences">
+      <lp name="corefgraph-en" timestamp="2014-07-13T15:50:52" version="0.8"/>
+    </linguisticProcessors>
+    <linguisticProcessors layer="constituency">
+      <lp beginTimestamp="2014-07-13T15:50:45+0200" endTimestamp="2014-07-13T15:50:52+0200" name="ixa-pipe-parse-en" version="1.0.0"/>
+    </linguisticProcessors>
+    <linguisticProcessors layer="terms">
+      <lp beginTimestamp="2014-07-13T15:50:43+0200" endTimestamp="2014-07-13T15:50:43+0200" name="ixa-pipe-pos-en" version="1.0.0"/>
+      <lp beginTimestamp="2014-07-13T15:50:42CEST" endTimestamp="2014-07-13T15:50:53CEST" name="VUA-DSC-WSD" version="30april2014_v1.1"/>
+    </linguisticProcessors>
+    <linguisticProcessors layer="deps">
+      <lp beginTimestamp="2014-07-13T15:50:53+0200" endTimestamp="2014-07-13T15:51:11+0200" name="ixa-pipe-srl-en" version="1.0"/>
+    </linguisticProcessors>
+    <linguisticProcessors layer="timex3">
+      <lp beginTimestamp="2014-07-13T15:50:42+0200" endTimestamp="2014-07-13T15:51:12+0200" name="TimePro" version="v1.2, based on Yamcha"/>
+    </linguisticProcessors>
+    <linguisticProcessors layer="opinions">
+      <lp beginTimestamp="2014-07-13T15:50:42CEST" endTimestamp="2014-07-13T15:50:53CEST" name="Deluxe opinion miner (CRF+SVM)" version="10jan2014_2.0"/>
+    </linguisticProcessors>
+    <linguisticProcessors layer="entities">
+      <lp beginTimestamp="2014-07-13T15:50:43+0200" endTimestamp="2014-07-13T15:50:45+0200" name="ixa-pipe-nerc-en" version="1.0.0"/>
+      <lp beginTimestamp="2014-07-13T15:50:53+0200" endTimestamp="2014-07-13T15:50:53+0200" name="ixa-pipe-ned-en" version="1.0"/>
+    </linguisticProcessors>
+    <linguisticProcessors layer="vua-event-coref-intradoc-lemma-baseline">
+      <lp beginTimestamp="2014-07-13T15:51:13+0200" endTimestamp="2014-07-13T15:51:13+0200" name="vua-event-coref-intradoc-lemma-baseline" timestamp="2014-07-13T15:51:13+0200" version="1.0"/>
+    </linguisticProcessors>
+  </nafHeader>
+  <raw>vauxhall</raw>
+  <text>
+    <wf id="w1" length="8" offset="0" para="1" sent="1">vauxhall</wf>
+  </text>
+  <terms>
+    <term id="t1" lemma="vauxhall" morphofeat="RB" pos="A" type="open">
+      <span>
+        <!--vauxhall-->
+        <target id="w1"/>
+      </span>
+    </term>
+  </terms>
+  <constituency>
+    <tree>
+      <t id="ter1">
+        <!--vauxhall-->
+        <span>
+          <target id="t1"/>
+        </span>
+      </t>
+      <nt id="nter1" label="TOP"/>
+      <nt id="nter2" label="NN"/>
+      <edge from="nter2" head="yes" id="tre2" to="nter1"/>
+      <edge from="ter1" id="tre3" to="nter2"/>
+    </tree>
+  </constituency>
+  <timeExpressions>
+    <timex3 id="tmx0" type="DATE" value="2014-07-13">
+      <span/>
+    </timex3>
+  </timeExpressions>
+</NAF>

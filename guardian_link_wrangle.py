@@ -13,6 +13,7 @@ articles = load_pickle(options.current_articles_path)
 guardian_links = load_pickle(options.guardian_links_path)
 
 # Loop through list of Guardian articles 1 by 1
+print "Wrangling..."
 for g in guardian_links:
 
 	# Get ID of article we pulled

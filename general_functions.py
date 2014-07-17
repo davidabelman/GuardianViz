@@ -33,6 +33,7 @@ def export_dict_to_json(data, path):
 	j = json.dumps(data)
 	with open(path, 'w') as file_to_write:
 		file_to_write.write(j)
+	print "Exported JSON (%s)" %(path) 
 
 def convert_str_to_date(string):
 	"""
@@ -43,6 +44,13 @@ def convert_str_to_date(string):
 	struct = strptime(string[0:10], "%Y-%m-%d")
 	dt = datetime.fromtimestamp(mktime(struct))
 	return dt
+
+def convert_datetime_to_str(dt):
+	"""
+	Converts datetime to str in format 2014-7-4
+	"""
+	import datetime
+	return "%s-%s-%s" %(dt.year, dt.month, dt.day)
 
 def create_REST_request(main, parameters = []):
 	"""

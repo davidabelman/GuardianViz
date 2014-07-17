@@ -113,7 +113,7 @@ for request in raw_data:
 								}
 		
 print "Overall we have %s articles in the collection" %(len(articles))
-save_pickle (articles, options.article_path)
+save_pickle (articles, "data/articles.p")
 
 
 

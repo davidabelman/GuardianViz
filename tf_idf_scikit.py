@@ -62,7 +62,7 @@ def print_results(articles, key):
 	Print 3 test cases out
 	"""
 	if options.tfidf_print_test_on:
-		print "\nChecking random results:\n"
+		print "\nChecking random results (for key %s):\n" %(key)
 		for rand in [25,12,1]:
 			a = articles[articles.keys()[rand]]
 			print "Original article:", a['id']

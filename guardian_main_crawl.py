@@ -47,7 +47,7 @@ def how_many_pages():
 	"""
 	Discovers how many pages in the request to be carried out
 	"""
-	request = create_request(main, parameters)
+	request = create_REST_request(main, parameters)
 	response = urllib2.urlopen(request).read()
 	data = json.loads(response)
 	return data['response']['pages']
@@ -58,8 +58,8 @@ data_pickle_path = options.raw_pickle_path
 # Set up the parameters
 main = "http://beta.content.guardianapis.com/world?"
 api_key = "api-key=explorer"
-from_date = "from-date="+options.main_guardian_crawl_from_date
-to_date = "to-date="+options.main_guardian_crawl_to_date
+from_date = "from-date="+convert_datetime_to_str(options.crawl_start_datetime)
+to_date = "to-date="+convert_datetime_to_str(options.crawl_end_datetime)
 use_date = "use-date=published"
 order_by = "order-by=newest"
 page_size = "page-size=76"
