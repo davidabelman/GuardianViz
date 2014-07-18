@@ -99,7 +99,7 @@ function remove_SVG_draw_squares(filename) {
 }
 
 function draw_squares() {
-	var filename = $('input[name=tag]:checked').val() + "_" + $('input[name=dayrange]:checked').val() + ".json"
+	var filename = 'json/grid/' + $('input[name=tag]:checked').val() + "_" + $('input[name=dayrange]:checked').val() + ".json"
 
 	// Load JSON data and get going!
 	d3.json(filename, function(json) {
@@ -114,7 +114,7 @@ function draw_squares() {
 		// Calculate max and min values for scaling
 		var maxX = d3.max(dataset, function(d) { return d['x']; });
 		var maxY = d3.max(dataset, function(d) { return d['y']; });
-		var maxFB = d3.max(dataset, function(d) { return d['fb']; })
+		var maxFB = d3.max(dataset, function(d) { return d['fb']; })/3
 		var minRed = d3.min(dataset, function(d) { return d['r']; })
 		var maxRed = d3.max(dataset, function(d) { return d['r']; })
 		var minBlue = d3.min(dataset, function(d) { return d['b']; })
@@ -150,7 +150,7 @@ function draw_squares() {
 							 .range([0, width/maxY]);
 		
 		var labelScale = d3.scale.linear()
-							 .domain([5, 40])
+							 .domain([3, 40])
 							 .range([12, 0]);
 
 		var hslScale = d3.scale.linear()

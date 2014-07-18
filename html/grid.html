@@ -29,6 +29,16 @@
 		
 		<script src="js/grid.js"></script>
 		<script src="js/bigslide.js"></script>
+		<script type="text/javascript" src="js/jquery.leanModal.min.js"></script>
+		
+		<!-- start Mixpanel -->
+		<script type="text/javascript">(function(f,b){if(!b.__SV){var a,e,i,g;window.mixpanel=b;b._i=[];b.init=function(a,e,d){function f(b,h){var a=h.split(".");2==a.length&&(b=b[a[0]],h=a[1]);b[h]=function(){b.push([h].concat(Array.prototype.slice.call(arguments,0)))}}var c=b;"undefined"!==typeof d?c=b[d]=[]:d="mixpanel";c.people=c.people||[];c.toString=function(b){var a="mixpanel";"mixpanel"!==d&&(a+="."+d);b||(a+=" (stub)");return a};c.people.toString=function(){return c.toString(1)+".people (stub)"};i="disable track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config people.set people.set_once people.increment people.append people.track_charge people.clear_charges people.delete_user".split(" ");
+		for(g=0;g<i.length;g++)f(c,i[g]);b._i.push([a,e,d])};b.__SV=1.2;a=f.createElement("script");a.type="text/javascript";a.async=!0;a.src="//cdn.mxpnl.com/libs/mixpanel-2.2.min.js";e=f.getElementsByTagName("script")[0];e.parentNode.insertBefore(a,e)}})(document,window.mixpanel||[]);
+		mixpanel.init("6bb49e3964cafa80b12ab651cbb3ccac");</script>
+		<!-- end Mixpanel -->
+
+		<!-- start Google Analytics -->
+		<!-- end Google Analytics -->
 		
 	</head>
 	
@@ -43,14 +53,14 @@
 	            <span class="icon-bar"></span>
 	            <span class="icon-bar"></span>
 	          </button>
-	          <a class="navbar-brand" href="#">Guardian news visualisations</a>
+	          <a class="navbar-brand" href="visualisation_index.html">Guardian news visualisations</a>
 	        </div>
 	        <div class="navbar-collapse collapse">
 	          <ul class="nav navbar-nav navbar-right">
-	            <li><a href="#">Other visualisations</a></li>
-	            <li><a href="#">About this visualisation</a></li>
+	            <li><a href="visualisation_index.html">Other visualisations</a></li>
+	            <li><a id='about_link' href="#">About this visualisation</a></li>
 	            <li><a href="#options" class="options-link">Options</a></li>
-	            <li><a href="#">David Abelman</a></li>
+	            <li><a href="http://www.davidabelman.co.uk" target="_blank">David Abelman</a></li>
 	          </ul>
 	        </div>
 	      </div>
@@ -89,7 +99,7 @@
 					     	<input type="radio" name="corner_radius" value=100 id='rect_to_circle' checked='checked'>
 						    <span>Circles</span>
 
-						    <input type="radio" name="corner_radius" value=0 id='circle_to_rect' >
+						    <input type="radio" name="corner_radius" value=1 id='circle_to_rect' >
 						    <span>Squares</span>
 						
 						    
@@ -136,8 +146,15 @@
 
 		</nav>
 		
+		<!-- Main body of the page with grid and article text -->
 		<div class='container'>
 			<div class="row padder"></div>
+			
+					<div id="about_visualisation_modal">
+						<p>This visualisation scrapes data from <a href='http://www.theguardian.com' target="_blank">theguardian.com</a> website, and displays the articles in a grid format, where related subject matters should appear near to one another across the whole grid.</p>
+						<p>Firstly, the articles are analysed for content and flattened to two dimensions using principal components analysis (using all words from the headlines, standfirsts and tags as features), and are then skewed further into a regular 2D grid. Secondly (and separately from the principal components anlaysis), K-means clustering is applied on the articles, assigning some 'topic' to each article: to see these topic assignments, select 'Topic' as the colour source (this is the default setting). Different topics (as determined by K-means) are represented by different colours. These approximately align with the PCA-driven layout. Other ways to colour the articles are by popularity (this data is extracted from Facebook share data) and article recency.</p><p>All analysis is performed in Python, and visualisation using the <a href='http://www.d3js.org' target="_blank">D3.js</a> library.</p>
+					</div>
+
 			<div class="row">
 				<div class="col-sm-12 col-lg-6">
 					<div id='grid'>
@@ -149,7 +166,7 @@
 					<div id='newspaper_text_and_options' data-spy="affix" class='affix' class="col-sm-11 col-lg-4">
 						
 							<h5 id='date' >
-								
+								<!--Date goes here-->
 							</h5>
 
 							<h3 id='headline'>			
@@ -158,26 +175,26 @@
 
 							<p id='standfirst' >
 								Click on a block to open the article in a new window. All stories and data from <a href='http://www.theguardian.com'>theguardian.com</a>.
-							</p>
-
-							
-						
+							</p>						
 					</div>
 				</div>
-
-
-				
 			</div>
 		</div>
 
 		
 
 
-
 	</body>
 	<script>
+
 	    $(document).ready(function() {
 	        $('.options-link').bigSlide();
+
+	        // Prepare 'about' modal
+	        $('#about_link').leanModal()
+	        $('#about_link').click( function() {
+	        	$('#about_visualisation_modal').fadeIn()
+	        })
 	    });
 	    $('.selectpicker').selectpicker();
 
@@ -188,6 +205,7 @@
 	    //Removing and adding labels
 	    var remove_labels = function() {
 			$('svg text').hide('medium')
+			mixpanel.track("Grid - hide labels");
 		}
 		$('#tag_hide').click( function() {remove_labels()} )
 
@@ -208,7 +226,7 @@
 			d3.selectAll("svg rect")
 			    .transition()
 			    .duration(1000)
-			    .attr("rx",0)
+			    .attr("rx",1)
 			}
 		$('#circle_to_rect').click( function() {rect_to_circle()} )
 
