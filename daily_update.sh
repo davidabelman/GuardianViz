@@ -1,40 +1,40 @@
-#!/bin/sh
+# #!/bin/sh
 
-clear
-echo "\n======================================
-RUNNING ALL DAILY UPDATES:
-====================================="
+# clear
+# echo "\n======================================
+# RUNNING ALL DAILY UPDATES:
+# ====================================="
 
-# Run crawl modules
-echo "\n=======================
-Crawling Guardian site:
-======================="
-python guardian_main_crawl.py
+# # Run crawl modules
+# echo "\n=======================
+# Crawling Guardian site:
+# ======================="
+# python guardian_main_crawl.py
 
-echo "\n=======================
-Wrangling Guardian data:
-======================="
-python guardian_main_wrangle.py
+# echo "\n=======================
+# Wrangling Guardian data:
+# ======================="
+# python guardian_main_wrangle.py
 
-echo "\n=======================
-Crawling Facebook data:
-======================="
-python facebook_crawl.py
+# echo "\n=======================
+# Crawling Facebook data:
+# ======================="
+# python facebook_crawl.py
 
-echo "\n=======================
-Wrangling Facebook data:
-======================="
-python facebook_wrangle.py
+# echo "\n=======================
+# Wrangling Facebook data:
+# ======================="
+# python facebook_wrangle.py
 
-echo "\n=======================
-Crawling Guardian link data:
-======================="
-python guardian_link_crawl.py
+# echo "\n=======================
+# Crawling Guardian link data:
+# ======================="
+# python guardian_link_crawl.py
 
-echo "\n=======================
-Wrangling Guardian link data:
-======================="
-python guardian_link_wrangle.py
+# echo "\n=======================
+# Wrangling Guardian link data:
+# ======================="
+# python guardian_link_wrangle.py
 
 # Run algorithms
 # TF-IDF takes a long time...
@@ -48,6 +48,14 @@ echo "\n=======================
 Creating HTML grid output:
 ======================="
 python grid.py
+
+echo "\n=======================
+Git add/commit/push to Github and Heroku:
+======================="
+git add .
+git commit -m "Automatic daily update"
+git push origin master
+git push heroku master
 
 echo "\n=======================
 Finished - exiting.
