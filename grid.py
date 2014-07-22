@@ -212,7 +212,11 @@ for day_range in [2,7,30]:
 			if tags[tag] in articles_main[a]['tags'] and articles_main[a]['date'] >= start_date and articles_main[a]['date'] <= end_date:
 				article_set[a] = articles_main[a]
 		# Create grid
-		grid = calculate_grid(article_set)
+		try:
+			grid = calculate_grid(article_set)
+		except:
+			print "COULD NOT CREATE DICTIONARY: %s, %s days" %(tag, day_range)
+			grid = {}
 		# Write to a JSON file
 		path = 'html/json/grid/%s_%s.json' %(tag, day_range)
 		export_dict_to_json(grid, path)
