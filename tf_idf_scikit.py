@@ -39,6 +39,7 @@ def find_top_related_tfidf(query_tfidf, tfidf, ids, n=25):
 	cosine_similarities = linear_kernel(query_tfidf, tfidf).flatten()   # Multiple article TF-IDF with all others
 	related_docs_indices = cosine_similarities.argsort()[:(-n-1):-1]  # Take top N results (excluding itself)
 	ids_extracted = [ ids[x] for x in related_docs_indices ]
+	# import pdb; pdb.set_trace()
 	return zip(cosine_similarities[related_docs_indices], ids_extracted)  # [(0.5, id), (0.44, id2) .... ]
 
 def add_tfidf( articles, combine_keys = ['tags','headline','standfirst'], output_title = 'tfidf', n=25, stopwords='english' ):

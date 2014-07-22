@@ -41,9 +41,9 @@ articles_subset_size = 500
 # Creating TF-IDF links
 tfidf_print_test_on = True
 tfidf_tags = True
-tfidf_headline = True
-tfidf_standfirst = True
-tfidf_body = True
+tfidf_headline = False
+tfidf_standfirst = False
+tfidf_body = False
 tfidf_extra_stopwords = ['video', 'eyewitness', 'pictures']
 tf_idf_list_length = 20
 

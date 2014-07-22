@@ -70,3 +70,28 @@ def create_stopword_list(extra_words):
 	from sklearn.feature_extraction.text import TfidfVectorizer
 	original = list(TfidfVectorizer.get_stop_words(TfidfVectorizer(stop_words='english')))
 	return frozenset(original+extra_words)
+
+def find_articles_by_tag(articles, tag_list, all_tags_required=True):
+	"""
+	Given article dictionary and list of tags, export list of articles which match all tags or any tag
+	"""
+	return_list = []
+	# Convert a string into a list, assumes the string is one tag
+	if type(tag_list) == str:
+		tag_list = [tag_list]
+		print "Tag list was provided as a string: assuming just one tag. Please supply in list format if more than one tag."
+	# Loop through articles and add each one if it meets conditions
+	for a in articles:
+		article_tags = articles[a]['tags']
+		number_of_tags_provided = len(tag_list)
+		crossover = [x in article_tags for x in tag_list]  # results in list of [True, False, True, True] for tags provided
+		if all_tags_required:
+			if sum(crossover) == number_of_tags_provided:
+				return_list.append(articles[a])
+		else:
+			if sum(crossover) > 0:
+				return_list.append(articles[a])
+	return return_list
+
+
+
