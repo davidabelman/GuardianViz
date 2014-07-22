@@ -46,7 +46,7 @@ tag_filter = options.guardian_links_crawl_tag_filter
 total_counter = 0
 for a in articles:
 	if a not in guardian_links:
-		if tag_filter in articles[a]['tags'] and articles[a]['date']=>start_date and articles[a]['date']<=end_date:
+		if (tag_filter in articles[a]['tags']) and (articles[a]['date']>=start_date) and (articles[a]['date']<=end_date):
 			total_counter+=1
 print "We will be requesting %s URLs in this session." %(total_counter)
 
@@ -58,7 +58,7 @@ for a in articles:
 	if a not in guardian_links:
 		
 		# Filter by a certain tag for now
-		if tag_filter in articles[a]['tags'] and articles[a]['date']>start_date and articles[a]['date']<end_date:
+		if tag_filter in articles[a]['tags'] and articles[a]['date']>=start_date and articles[a]['date']<=end_date:
 
 			# We will create a request
 			main_with_id = main + a + '?'

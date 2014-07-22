@@ -20,7 +20,7 @@ http://www.lrec-conf.org/proceedings/lrec2014/pdf/645_Paper.pdf
 
 Log of all crawled:
 ===================
-Jan 2013- 12th July 2014:
+Aug 2012 - 12th July 2014:
 guardian --> world
 guardian_links --> world (tag = UK news)
 facebook_total --> world (tag = UK news), 1Jun-12Jul all

@@ -12,13 +12,13 @@ path_choice = {
 	'sample' : "data/articles_subset.p",
 }
 current_articles_path = path_choice [ 'all' ]
-crawl_start_datetime = datetime.datetime(2014,7,13)
-crawl_end_datetime = datetime.datetime(2014,7,17)
+crawl_start_datetime = datetime.datetime(2012,8,1)
+crawl_end_datetime = datetime.datetime(2012,9,30)
 
 # Raw data from Guardian
 raw_pickle_path = "data/world_data.p"
-main_guardian_crawl_min_wait = 2
-main_guardian_crawl_max_wait = 14
+main_guardian_crawl_min_wait = 5
+main_guardian_crawl_max_wait = 8
 
 # Main guardian crawl wrangle
 overwrite_articles = True
@@ -27,7 +27,7 @@ find_internal_links = False  # This slows things down a lot, therefore can toggl
 # Raw data from Facebook
 facebook_stats_path = "data/fb.p"
 facebook_crawl_wait = 0.5
-facebook_crawl_tag_filter = 'World news'  # e.g. 'UK news'
+facebook_crawl_tag_filter = 'UK news'  # e.g. 'UK news'
 
 # Raw data on Guardian links
 guardian_links_path = "data/guardian_links.p"

@@ -89,6 +89,7 @@ total_pages = how_many_pages()
 # Open up the pickles
 data_store = load_pickle(data_pickle_path)
 
+counter = 0
 #for i in range(total_pages):
 for i in range(total_pages):
 
@@ -110,7 +111,9 @@ for i in range(total_pages):
 
 	# Add data to pickle
 	data_store.append(page_data)
-	save_pickle ( data_store, data_pickle_path )
+	counter += 1
+	if counter%5==0:
+		save_pickle ( data_store, data_pickle_path )
 	
 
 
