@@ -218,7 +218,7 @@ for day_range in [2,7,30]:
 			path = 'html/json/grid/%s_%s.json' %(tag, day_range)
 			export_dict_to_json(grid, path)
 		except:
-			print "COULD NOT CREATE DICTIONARY: %s, %s days" %(tag, day_range)
+			print "Could not create dictionary. Tag = %s, Day range = %s. If small number of days likely due to too few articles. Not overwriting old file." %(tag, day_range)
 		
 
 # Plot internally within Python
