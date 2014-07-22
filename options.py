@@ -27,7 +27,7 @@ find_internal_links = False  # This slows things down a lot, therefore can toggl
 # Raw data from Facebook
 facebook_stats_path = "data/fb.p"
 facebook_crawl_wait = 0.5
-facebook_crawl_tag_filter = 'UK news'  # e.g. 'UK news'
+facebook_crawl_tag_filter = 'World news'  # e.g. 'UK news'
 
 # Raw data on Guardian links
 guardian_links_path = "data/guardian_links.p"

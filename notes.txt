@@ -6,7 +6,6 @@ Create test to measure recall of TF-IDF vs. related content / story bunches so I
 Download DBpedia data on all Guardian tags so I can show this, and also filter tags by 'person', 'country' etc. when showing news visualisations split by tag
 
 
-
 Character maps, who interacts with who when (could do Obama, Cameron, Merkel, etc??) http://csclub.uwaterloo.ca/~n2iskand/?page_id=13
 
 Visualise tags over time, i.e. how many times a month they are used? So would see spikes in Iraq, Gaza, etc.
@@ -17,6 +16,13 @@ http://dataaddict.fr/prenoms/#alain,amadou,anis,amine,alice,gerard,ghislain,habi
 
 Newsreader project
 http://www.lrec-conf.org/proceedings/lrec2014/pdf/645_Paper.pdf
+
+
+Create an API for use in web project. Commands:
+Get related story (parameter = past/future, parameter = 1 day, 1 week, 1 month, 1 year, 10 years) --> finds most relevant/significant story in time range (may need to look for peaks in news, and pick best article or first article within the peak)
+Split story history (parameter??=number of clusters to split into) --> splits the story into 2 (or N?) clusters of historical stories (and finds the big one within each of these using get related story(?))
+Fill out story (story1, story2) --> given 2 stories, tries to fill out the branch with another story that fits well between them timewise
+Optional parameter for the above would be a keyword/tag added by the user, to guide the search. I.e. if the user has a story about Israel/Palestine and wants to do a split story, he can define the paths of interest as: film, charities, and USA. This would then heavily influence the related story chains that are linked to this story...
 
 Log of all crawled:
 ===================
