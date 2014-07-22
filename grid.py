@@ -214,12 +214,12 @@ for day_range in [2,7,30]:
 		# Create grid
 		try:
 			grid = calculate_grid(article_set)
+			# Write to a JSON file
+			path = 'html/json/grid/%s_%s.json' %(tag, day_range)
+			export_dict_to_json(grid, path)
 		except:
 			print "COULD NOT CREATE DICTIONARY: %s, %s days" %(tag, day_range)
-			grid = {}
-		# Write to a JSON file
-		path = 'html/json/grid/%s_%s.json' %(tag, day_range)
-		export_dict_to_json(grid, path)
+		
 
 # Plot internally within Python
 if plot_grid:
