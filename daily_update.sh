@@ -49,13 +49,13 @@ Creating HTML grid output:
 ======================="
 python grid.py
 
-# echo "\n=======================
-# Git add/commit/push to Github and Heroku:
-# ======================="
-# git add .
-# git commit -m "Automatic daily update"
-# git push origin master
-# git push heroku master
+echo "\n=======================
+Git add/commit/push to Github and Heroku:
+======================="
+git add .
+git commit -m "Automatic daily update"
+git push origin master
+git push heroku master
 
 echo "\n=======================
 Finished - exiting.
