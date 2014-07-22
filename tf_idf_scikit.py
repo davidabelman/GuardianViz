@@ -43,6 +43,7 @@ def find_top_related_tfidf(query_tfidf, tfidf, ids, n=25):
 
 def add_tfidf( articles, combine_keys = ['tags','headline','standfirst'], output_title = 'tfidf', n=25, stopwords='english' ):
 	"""
+	The whole process:
 	Adds TF-IDF elements to the articles data structure, according to the keys specified, and n
 	"""
 	from sklearn.feature_extraction.text import TfidfVectorizer

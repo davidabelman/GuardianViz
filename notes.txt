@@ -1,3 +1,5 @@
+TODOS
+================
 Create virtualenv
 Add stemming to tf-idf
 Create SOM (b) just by connecting all with all and playing with settings in Gephi
@@ -5,7 +7,14 @@ Create test to measure recall of TF-IDF vs. related content / story bunches so I
 
 Download DBpedia data on all Guardian tags so I can show this, and also filter tags by 'person', 'country' etc. when showing news visualisations split by tag
 
+Create 'importance' metric for each page
+(based on number of FB shares, number of FB shares compared to similar articles (TFIDF), number of very similar articles within short timerange (TFIDF) (and also compare this to normal frequency of articles on the subject), internal guardian pagerank, novelty relative to all previous (time-wise) articles)
 
+Create static 'article clusters' which may make other analyses easier? So for each month split all news into clusters, assign each article to nearest cluster, and also store overall cohesiveness of each cluster. Can then pick out most shared/pageranked stories within each cluster, to use within importance metric
+
+
+IDEAS
+================
 Character maps, who interacts with who when (could do Obama, Cameron, Merkel, etc??) http://csclub.uwaterloo.ca/~n2iskand/?page_id=13
 
 Visualise tags over time, i.e. how many times a month they are used? So would see spikes in Iraq, Gaza, etc.
