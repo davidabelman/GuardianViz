@@ -201,7 +201,7 @@ articles_main = load_pickle("data/articles.p")
 
 # Go through combinations of articles to extract
 tags = {'uk':'UK news', 'world':'World news'}
-for day_range in [3,7,30]:
+for day_range in [2,7,30]:
 	now = datetime.datetime.now() #datetime.datetime(2014,6,30)
 	end_date = now
 	start_date = now-datetime.timedelta(days=day_range)
