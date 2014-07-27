@@ -12,8 +12,8 @@ path_choice = {
 	'sample' : "data/articles_subset.p",
 }
 current_articles_path = path_choice [ 'all' ]
-crawl_start_datetime = datetime.datetime(2014,7,18)
-crawl_end_datetime = datetime.datetime(2014,7,21)
+crawl_start_datetime = datetime.datetime(2014,7,22)  # Inclusive of this date!
+crawl_end_datetime = datetime.datetime(2014,7,27)  # Inclusive of this date!
 
 # Raw data from Guardian
 raw_pickle_path = "data/world_data.p"
