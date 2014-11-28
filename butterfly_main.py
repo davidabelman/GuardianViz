@@ -282,12 +282,14 @@ If 9+ articles use K=3
 Perform K-means clustering on the articles with K set as above
 """
 
-def play_with_related_articles():
+def play_with_related_articles(a=None, m=None):
 	"""
-	Explore related articles in terminal...
+	Explore related articles in the terminal...
+	NB: messy code!
 	"""
-	a=general_functions.load_pickle('data/articles_uk.p')
-	m=general_functions.load_pickle('data/articles_uk_cosine_similarities.p')
+	if a==None and m==None:
+		a=general_functions.load_pickle('data/articles.p')
+		m=general_functions.load_pickle('data/articles_cosine_similarities.p')
 	id_ = raw_input('Enter initial article ID. Leave blank to start with early NSA. >> ')
 	if id_=='':
 		id_ = 'world/2013/jun/09/nsa-prism-uk-government'
@@ -459,5 +461,5 @@ if False:
 	m=general_functions.load_pickle('data/articles_uk_cosine_similarities.p')
 	given_article_id_get_top_related(article_id='world/2013/nov/07/nsa-gchq-surveillance-european-law-report', future_or_past='future_articles', cosine_similarity_matrix=m, articles=a)
 
-if True:
+if False:
 	play_with_related_articles()
