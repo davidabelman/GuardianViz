@@ -11,6 +11,8 @@ Notes:
 3) For each topic we want to select the most relevant article to display to the user. This should be based on its PageRank, its Facebook shares, and its date. Details to be decided...
 """
 
+import time
+import sys
 import re
 WORD = re.compile(r'\w+')
 import math
@@ -33,7 +35,7 @@ def get_cosine(vec1, vec2):
     
 	# Calculate numerator (return 0 if no intersection)
     intersection = set(vec1.keys()) & set(vec2.keys())
-    if len(intersection)==0:
+    if len(intersection)<5:
     	return 0  # Avoid unecessary further calculation...
     numerator = sum([vec1[x] * vec2[x] for x in intersection])
 
@@ -79,6 +81,21 @@ def compare_dates(date1, date2):
 	else:
 		return 'past'
 
+def article_type_is_bad(id_str):
+	"""
+	Checks id_str (ID, e.g. 'world/gallery/2013/aug/19/pipe-band-championship-2013-glasgow') for banned terms, such as 'gallery', 'video', etc.
+	Returns True if any banned terms found...
+	"""
+	check = id_str[0:30]  # Take only first part of ID
+	banned_terms = ['video', 'gallery', 'interactive', 'commentisfree', 'blog', 'live', 'shortcuts']
+	# Check each banned term
+	for x in banned_terms:
+		if x in check:
+			return True
+	# If no banned terms found
+	else:
+		return False
+
 def create_vector_from_article(article, include_standfirst=False):
 	"""
 	Convert an article (which is a dictionary with keys of 'standfirst', 'tags', 'headline') into a count of terms within the values of these keys
@@ -105,7 +122,7 @@ def create_vector_from_article(article, include_standfirst=False):
 		return count_terms(headline+standfirst+tags)
 	 
 
-def create_cosine_similarity_pickle_all_articles(articles_to_use = 'uk_1_wk', threshold=0.5):
+def create_cosine_similarity_pickle_all_articles(threshold=0.5, incremental_add=True):
 	"""
 	Create cosine similarity matrix for all articles currently existing
 	Should only need to be run once (we can then add to it incrementally)
@@ -126,18 +143,35 @@ def create_cosine_similarity_pickle_all_articles(articles_to_use = 'uk_1_wk', th
 		},
 	}
 	"""
-	# Check we want to overwrite the main pickle (will take a long time...)
-	u = raw_input('Are you sure you wish recalculate all cosine similarity values??\nWe will use "%s" as the article set. (Press "y" to continue...) >> ' %articles_to_use)
-	if u!='y':
-		print "** CANCELLED **"
-		return None
-	print "Creating cosine similarity matrix using %s" %articles_to_use
+	if incremental_add == False:
+		# Everything will be recalculated from afresh
+		# Check we want to overwrite the main pickle (will take a long time...)
+		print "WARNING: Are you sure you wish recalculate all cosine similarity values??"
+		print "This will overwrite all previous values and may take a long time."
+		print "We will use *%s* as the article set." %options.current_articles_path
+		print "If not, set incremental_add to True: this will only calculate new cosine pairs."
+		print "Press 'y' to continue..."
+		u = raw_input('>> ')
+		if u!='y':
+			print "** CANCELLED **"
+			return None
+		print "Creating cosine similarity matrix using %s" %options.current_articles_path
 
-	# Empty variable to fill
-	cosine_similarity_matrix = {}  # To fill with whole matrix
+		# Empty variable to fill
+		cosine_similarity_matrix = {}  # To fill with whole matrix
 
-	# Load articles and start counter
-	articles = general_functions.load_pickle(options.path_choice[articles_to_use])
+	elif incremental_add==True: 
+		# We will only add the new articles and calculate pairs involving these
+		cosine_similarity_matrix = general_functions.load_pickle(filename = options.current_articles_path_cosine_similarites)  # To add incremental articles to
+		if cosine_similarity_matrix == None:
+			print "-- WARNING: could not load similarity matrix. Does it exist already or do we need to switch off incremental mode (i.e. create new matrix)?\n"
+			sys.exit()
+
+	# Start timer
+	t1 = time.time()
+
+	# Load articles and start counter	
+	articles = general_functions.load_pickle(options.current_articles_path)
 	total_number = len(articles)
 	counter = 0
 	print "We have %s articles to loop through." %total_number
@@ -146,6 +180,16 @@ def create_cosine_similarity_pickle_all_articles(articles_to_use = 'uk_1_wk', th
 	for id1 in articles:
 		counter+=1
 		print "Article %s/%s" %(counter, total_number)
+
+		# Skip if article already in the cosine_similarity_matrix
+		if id1 in cosine_similarity_matrix:
+			print "Skipping article, already analysed"
+			continue
+
+		# Skip if article is not of type we like
+		if article_type_is_bad(id1):
+			print "Skipping article, bad type"
+			continue
 
 		# Load article
 		article1 = articles[id1]
@@ -164,6 +208,10 @@ def create_cosine_similarity_pickle_all_articles(articles_to_use = 'uk_1_wk', th
 		for id2 in articles:
 			if id1==id2:
 				continue
+			if article_type_is_bad(id2):
+				continue
+
+			# Load article
 			article2 = articles[id2]
 
 			# Create vector (dict of counts) for the second article
@@ -190,10 +238,20 @@ def create_cosine_similarity_pickle_all_articles(articles_to_use = 'uk_1_wk', th
 			# Stored as integer (/100) as saves 25% space
 			date1, date2 = article1['date'], article2['date']
 			future_or_past = compare_dates(date1, date2)
+			cosine = int(cosine*100)
+
 			if future_or_past=='future':
-				article1_cosine_similarities['future_articles'][id2] = int(cosine*100)
+				article1_cosine_similarities['future_articles'][id2] = cosine
 			elif future_or_past=='past':
-				article1_cosine_similarities['past_articles'][id2] = int(cosine*100)
+				article1_cosine_similarities['past_articles'][id2] = cosine
+
+			# Also add to corresponding 'other' article if it exists in the matrix already
+			# Note that past/future are swapped, as we are comparing swapped dates to the above
+			if id2 in cosine_similarity_matrix:
+				if future_or_past=='future':
+					cosine_similarity_matrix[id2]['past_articles'][id1] = cosine
+				elif future_or_past=='past':
+					cosine_similarity_matrix[id2]['future_articles'][id1] = cosine
 
 		# Now we have looped through all articles, we add the line for id1 to our overall matrix
 		cosine_similarity_matrix[id1] = article1_cosine_similarities
@@ -202,59 +260,24 @@ def create_cosine_similarity_pickle_all_articles(articles_to_use = 'uk_1_wk', th
 			print "THIS IS THE SIMILARITY MATRIX LINE"
 			pprint.pprint(cosine_similarity_matrix)
 
+		# Save the pickle every 100 additions
+		if counter%100==0:
+			general_functions.save_pickle(data = cosine_similarity_matrix, filename = options.current_articles_path_cosine_similarites)
+
 	# End for statement looping over id1. Save pickle.
-	general_functions.save_pickle(data = cosine_similarity_matrix, filename = 'data/cosine_similarity_matrix_'+articles_to_use+'.p')
+	general_functions.save_pickle(data = cosine_similarity_matrix, filename = options.current_articles_path_cosine_similarites)
+	
+	# End timer
+	t2 = time.time()
+	print "TOTAL TIME:", t2 - t1
 
 
-def update_cosine_similarity_pickle_with_new_articles(articles_to_use = 'uk_1_wk', threshold=0.5):
-	"""
-	Update cosine similarity matrix with any new articles
-	Loops through all articles in article set
-	 - See if they already appear in similarity matrix as a row (skip if so)
-	 - If not, compare to all other articles
-	 - Add any values to both the new row, AND any older article rows 
-	Can run incrementally when new articles have been crawled from Guardian
-	Pickle will be saved to disk.
-	Form of matrix is:
-	{'article1': 
-		{'past_articles':
-			{'article5':0.71,
-			 'article14': 0.88,
-			 ...
-			 }
-		},
-		{'future_articles':
-			{'article9':0.99,
-			 'article29': 0.73,
-			 ...
-			 }
-		},
-	}
-	"""
-	# Current cosine similarity matrix
-	cosine_similarity_matrix = general_functions.load_pickle(filename = 'data/cosine_similarity_matrix_'+articles_to_use+'.p')
+# Create a NEW cosine similarity dictionary and save as pickle for ALL articles
+# WARNING: incremental_add=False means we start from a blank matrix
+# create_cosine_similarity_pickle_all_articles(incremental_add=False)
 
-	# Load all articles
-
-	# Loop through articles, see if already appearing in matrix
-
-		# If appearing in matrix already, we have already analysed - skip
-
-		# If not appearing in matrix already, compare with all other articles
-
-			# If similarity meets threshold:
-
-				# Add to new row
-
-				# Also add to old row under future articles (i.e. each value appears twice)
-
-
-# Create a cosine similarity dictionary and save as pickle for ALL articles
-# Should not need to run this more than once, we can then just update incrementally
-# create_cosine_similarity_pickle_all_articles()
-
-# Update the cosine similarity dictionary and overwrite pickle for incremental articles
-# Should run this incrementally when we crawl more articles from Guardian
-# update_cosine_similarity_pickle_with_new_articles()
+# Update the cosine similarity dictionary and save as pickle for incremental articles
+# incremental_add=True means we only add incremental articles
+create_cosine_similarity_pickle_all_articles(incremental_add=True)
 
 

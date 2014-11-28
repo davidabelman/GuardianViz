@@ -12,6 +12,9 @@ path_choice = {
 	'sample' : "data/articles_subset.p",
 }
 current_articles_path = path_choice [ 'all' ]
+current_articles_path_cosine_similarites = current_articles_path[0:-2]+'_cosine_similarities.p'
+
+# Datetime for crawl
 crawl_start_datetime = datetime.datetime(2014,7,22)  # Inclusive of this date!
 crawl_end_datetime = datetime.datetime(2014,7,27)  # Inclusive of this date!
 

@@ -106,5 +106,26 @@ def find_articles_by_tag(articles, tag_list, all_tags_required=True):
 				return_list.append(a)
 	return return_list
 
+def print_current_status():
+	"""
+	Print current status on path defined by options.current_articles_path
+	"""
+	import options	
+	print "======"
+	print "Status for %s" %options.current_articles_path
+	print "======"
+
+	articles = load_pickle(filename = options.current_articles_path)
+	cosine_similarities = load_pickle(filename = options.current_articles_path_cosine_similarites)
+
+	# Number of articles crawled
+	print "Articles crawled:", len(articles)
+
+	# Date range for articles
+	print "First article date:", min([articles[x]['date'] for x in articles])
+	print "Latest article date:", max([articles[x]['date'] for x in articles])
+
+	# Number of articles analysed for cosine similarity
+	print "Cosine similarities calculated:", len(cosine_similarities)
 
 
