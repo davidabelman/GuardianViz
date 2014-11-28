@@ -87,7 +87,7 @@ def article_type_is_bad(id_str):
 	Returns True if any banned terms found...
 	"""
 	check = id_str[0:30]  # Take only first part of ID
-	banned_terms = ['video', 'gallery', 'interactive', 'commentisfree', 'blog', 'live', 'shortcuts']
+	banned_terms = ['video', 'gallery', 'picture', 'interactive', 'commentisfree', 'blog', 'live', 'shortcuts']
 	# Check each banned term
 	for x in banned_terms:
 		if x in check:
@@ -261,7 +261,7 @@ def create_cosine_similarity_pickle_all_articles(threshold=0.5, incremental_add=
 			pprint.pprint(cosine_similarity_matrix)
 
 		# Save the pickle every 100 additions
-		if counter%100==0:
+		if counter%30==0:
 			general_functions.save_pickle(data = cosine_similarity_matrix, filename = options.current_articles_path_cosine_similarites)
 
 	# End for statement looping over id1. Save pickle.
@@ -272,12 +272,192 @@ def create_cosine_similarity_pickle_all_articles(threshold=0.5, incremental_add=
 	print "TOTAL TIME:", t2 - t1
 
 
+###### SELECTING TOP RELATED ARTICLES #########
+"""
+Given article IDs
+Apply any filters (e.g. only want to look at certain date range from original)
+If 3 or fewer articles just return the article IDs, or top scored one
+If 4-8 articles use K=2
+If 9+ articles use K=3
+Perform K-means clustering on the articles with K set as above
+"""
+
+def play_with_related_articles():
+	"""
+	Explore related articles in terminal...
+	"""
+	a=general_functions.load_pickle('data/articles_uk.p')
+	m=general_functions.load_pickle('data/articles_uk_cosine_similarities.p')
+	id_ = raw_input('Enter initial article ID. Leave blank to start with early NSA. >> ')
+	if id_=='':
+		id_ = 'world/2013/jun/09/nsa-prism-uk-government'
+	future_or_past = raw_input('Look into the future (f) or past (p)? >> ')
+	future_or_past = future_or_past[0].lower().strip()
+	t = {'f':'future_articles', 'p':'past_articles'}[future_or_past]
+	while True:
+		id_out = given_article_id_get_top_related(id_, t, m, a)
+		print chr(27) + "[2J"
+		if not id_out:
+			print "NO MORE ARTICLES!"
+			sys.exit()		
+		print "==============\nCURRENT ARTICLE:"
+		print a[id_]['headline']
+		print a[id_]['standfirst']
+		print a[id_]['date']
+		print id_
+		print 
+		print "==============\nRELATED ARTICLES:"
+		counter = 0
+		for x in id_out:
+			counter += 1	
+			print 				
+			print counter
+			print a[x]['headline']
+			print a[x]['standfirst']
+			if future_or_past=='f':
+				earlier_later = 'later'
+			else:
+				earlier_later = 'earlier'
+			print str((a[x]['date']-a[id_]['date']).days)+' days '+earlier_later
+			print x
+			print "\n-----------------"
+			
+		number = raw_input('Which article (1, 2, 3, etc...) shall we follow next...? >> ')
+		number = int(number)-1
+		id_ = id_out[number]
+
+
+def given_article_id_get_top_related(article_id, future_or_past, cosine_similarity_matrix, articles):
+	"""
+	Given an article ID (e.g. 'world/2013/aug/19/...') and either 'past_articles' or 'future_articles'
+	Look up article in cosine_similarity matrix to find related IDs in past or future
+	Load all related IDs into a mini article set
+	Convert contents to TFIDF form
+	Carry out KMeans clustering with appropriate K value
+	Pull out top article for each cluster
+	"""
+	# Related article IDs in the form:
+	# {u'world/2012/dec/27/central-african-republic-rebels-capital': 59, u'world/2012/dec/28/central-african-republis-us-embassy': 54,}   
+	related_articles_and_scores = cosine_similarity_matrix[article_id][future_or_past]
+
+	# If we don't have many articles, just return the articles we have
+	if len(related_articles_and_scores)<=3:
+		return [id_ for id_ in related_articles_and_scores]
+
+	# Loop through the IDs to create a mini article set
+	mini_article_set = {}
+	for id_ in related_articles_and_scores:
+		# Copy from the main articles library to the mini article set
+		mini_article_set[id_] = articles[id_]
+
+	# TF-IDF of articles
+	ids, _, tfidf_sparse_matrix = articles_to_tfidf(mini_article_set)
+
+	# Apply K-means clustering
+	k_means = k_means_cluster(tfidf_sparse_matrix)
+
+	# Create [ (id, kmeans_cluster, cosine_score), (id, kmeans_cluster, cosine_score) ...]
+	ids_and_labels = zip (ids, k_means.labels_)
+	ids_and_labels_and_scores = [(id_, label, related_articles_and_scores[id_]) for id_,label in ids_and_labels]
+
+	# Pick top article from each cluster
+	output = pick_top_id_from_each_cluster(ids_and_labels_and_scores)
+	
+	# Return list of IDs
+	return output
+
+
+def pick_top_id_from_each_cluster(ids_and_labels_and_scores):
+	"""
+	Given list of IDs, cluster labels, and cosine scores, pick out the 'best' article to show for each cluster
+	TODO: currently just picks most related article, but should also use PageRank, Facebook etc. which we can look up from main article dictionary...
+	Returns 2 or 3 IDs in a list
+	"""
+	top_id_set = []
+	number_of_clusters = len(set([x[1] for x in ids_and_labels_and_scores]))  # Will be 2 or 3
+	# For 0, 1, 2 (i.e. cluster numbers)
+	for k in range(number_of_clusters):
+		# Create a list just for this cluster
+		filtered = [x for x in ids_and_labels_and_scores if x[1]==k]
+		# Sort by cosine score
+		filtered = sorted(filtered, key=lambda x: x[2], reverse=True)
+		# Pick the top one only and add to return list
+		top_id = filtered[0][0]
+		top_id_set.append(top_id)
+	return top_id_set
+
+
+def k_means_cluster(tfidf_sparse_matrix, K=None):
+	"""
+	Given tf-idf of an article set, apply K-means clustering
+	If no K value provided, we calculate it as 2 or 3
+	Returns a k_means object (which we can then call .labels_ on later...)
+	"""
+	from sklearn.cluster import KMeans
+	import numpy as np
+
+	# 3 clusters if more than 9 articles, 2 otherwise
+	if not K:
+		K = 3 if tfidf_sparse_matrix.shape[0]>=9 else 2
+	k_means = KMeans(init='k-means++', n_clusters=K, n_init=20)
+	k_means.fit(tfidf_sparse_matrix)
+	k_means_labels = k_means.labels_
+	return k_means
+	
+def articles_to_tfidf(articles):
+	"""
+	Given article set, output ids, strings of terms, TF-IDF sparse matrix
+	For each article we need to create a string which is all words in article:
+		e.g. 'john major wins vote john major has won the vote laadeedaa'
+	Final structure going into vectoriser is tuple of these strings	
+	"""
+	from sklearn.feature_extraction.text import TfidfVectorizer
+
+	ids_and_data = []
+
+	# Loop through each article and pull out string of terms
+	for id_ in articles:
+		article_vector = create_vector_from_article(articles[id_], include_standfirst=True)
+		article_string = convert_vector_to_string(article_vector)
+
+		# Add this to the ids_and_data list as a tuple
+		ids_and_data.append( (id_, article_string) )
+
+	# Create tuple of all of the strings, and one of all ids too
+	ids, strings = zip(*ids_and_data)
+
+	# Apply TF-IDF to get a sparse matrix
+	sparse_matrix = TfidfVectorizer(stop_words=stopwords).fit_transform(strings)
+
+	return ids, strings, sparse_matrix
+
+def convert_vector_to_string(vector):
+	"""
+	Given Counter (i.e. dict) of terms
+	Convert these into one string
+	"""
+	output_string = ""
+	for key in vector:
+		for _ in range(vector[key]):
+			output_string += key.replace(' ', '')
+			output_string += ' '
+	return output_string
+
+
 # Create a NEW cosine similarity dictionary and save as pickle for ALL articles
 # WARNING: incremental_add=False means we start from a blank matrix
-# create_cosine_similarity_pickle_all_articles(incremental_add=False)
+if False:
+	create_cosine_similarity_pickle_all_articles(threshold=0.3, incremental_add=False)
 
 # Update the cosine similarity dictionary and save as pickle for incremental articles
 # incremental_add=True means we only add incremental articles
-create_cosine_similarity_pickle_all_articles(incremental_add=True)
+if False:
+	create_cosine_similarity_pickle_all_articles(incremental_add=True)
 
+if False:
+	a=general_functions.load_pickle('data/articles_uk.p')
+	m=general_functions.load_pickle('data/articles_uk_cosine_similarities.p')
+	given_article_id_get_top_related(article_id='world/2013/nov/07/nsa-gchq-surveillance-european-law-report', future_or_past='future_articles', cosine_similarity_matrix=m, articles=a)
 
+if True:
+	play_with_related_articles()
