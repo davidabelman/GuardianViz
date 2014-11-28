@@ -69,7 +69,10 @@ def create_stopword_list(extra_words):
 	"""
 	from sklearn.feature_extraction.text import TfidfVectorizer
 	original = list(TfidfVectorizer.get_stop_words(TfidfVectorizer(stop_words='english')))
-	return frozenset(original+extra_words)
+	if extra_words:
+		return frozenset(original+extra_words)
+	else:
+		return frozenset(original)
 
 def convert_dict_to_list(dictionary):
 	return [dictionary[key] for key in dictionary]

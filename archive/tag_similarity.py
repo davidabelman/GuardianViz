@@ -44,7 +44,7 @@ def text_to_vector(text):
      return Counter(words)
 
 WORD = re.compile(r'\w+')
-articles = load_pickle(options.article_subset_path)
+articles = load_pickle(options.path_choice['sample'])
 
 for id_ in articles:
     articles[id_]['tag_similarities'] = {}
