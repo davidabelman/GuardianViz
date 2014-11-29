@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<!-- See original script at http://bl.ocks.org/mbostock/1095795 -->
+
+<style>
+
+.link {
+  stroke: #000;
+  stroke-width: 1.5px;
+}
+
+.node {
+  fill: #f00;
+  stroke: #f00;
+  stroke-width: 1.5px;
+}
+.node:hover {
+  fill: #f44;
+  stroke: #f44;
+  stroke-width: 6.5px;
+  cursor: copy;
+}
+
+.clicked {
+  fill: #999;
+  stroke: #999;
+  stroke-width: 1.5px;
+}
+
+.clicked:hover {
+  fill: #bbb;
+  stroke: #bbb;
+  stroke-width: 6.5px;
+  cursor: initial;
+}
+
+
+
+</style>
+
+<h3 id='headline'>HEADLINE...</h3>
+<p id='strapline'>strapline...</p>
+
+<body>
+<!-- <script src="http://d3js.org/d3.v3.min.js"></script> -->
+<script src="d3/d3.v3.js"></script>
+<script src="js/jquery-2.1.1.min.js"></script>
+<script>
+
+COUNT = 0
+
+function make_nodes_hoverable() {
+  // This is run at each iteration (i.e. when new nodes are added)
+  // This will ensure that when a node is hovered:
+  //  --we display headline and story info in the panel
+        d3.selectAll('.node').on('mouseover', 
+          function(d) {
+            update_panel(d)  // Which will extract d.headline, d.strapline etc. and display in the side panel
+          })
+        d3.selectAll('.node').on('mouseout', 
+          function(d) {
+            clearpanel(d)  // Which will extract d.headline, d.strapline etc. and display in the side panel
+          })
+}
+
+function update_panel(d) {
+  $('#headline').text(d.headline)
+  $('#strapline').text(d.strapline)
+}
+function clearpanel(d) {
+  $('#headline').text('empty')
+  $('#strapline').text('empty')
+}
+
+function make_nodes_NOT_clickable() {
+  $(".node").click( function(e) {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    return false
+  })
+}
+
+
+function make_nodes_clickable() {
+  // This is run at each iteration (i.e. when new nodes are added)
+  // This will ensure that when a node is clicked:
+  //  --we run AJAX to get related nodes
+  //  --the new nodes are pushed to the nodes/links matrix
+  //  --the clicked node has its colour changed
+
+    $(".node").click( function(e) {
+      // Remove previous 'make_circles_clickable' action (so we don't get multiple nodes added)
+      e.preventDefault();
+      e.stopImmediatePropagation();
+
+      // If node already clicked, do nothing
+      var class_clicked = $(this).attr('class')
+      console.log("Clicked class:", class_clicked)
+      if (class_clicked.search('clicked')>=0) {
+        return false
+      }
+
+      // Detect what was clicked
+      var id_clicked = $(this).attr('id')
+      console.log("Clicked id:", id_clicked)      
+
+      // Pick the node we just clicked
+      var clicked_node = nodes.filter( function(n) {return n.id==id_clicked} )[0]
+      console.log("Data of clicked:", clicked_node)
+      
+      // Create a new nodes based on AJAX call (TODO)
+      COUNT += 1
+      var new_node = {id: String(COUNT), headline:'This is a headline'+String(COUNT), strapline:'The strapline data goes here too'}    
+      COUNT += 1
+      var new_node_2 = {id: String(COUNT), headline:'This is a headline'+String(COUNT), strapline:'The strapline data goes here too'}  
+      COUNT += 1
+      var new_node_3 = {id: String(COUNT), headline:'This is a headline'+String(COUNT), strapline:'The strapline data goes here too'}    
+      
+      // Add the new node(s) and connect to an old node
+      
+      console.log('New node to push:', new_node)
+      console.log('Nodes (before push):', nodes)
+      // nodes.push(new_node);
+      nodes.push(new_node, new_node_2, new_node_3);
+      console.log('Nodes (after push):', nodes)
+      links.push(
+        {source: clicked_node, target: new_node},
+        {source: clicked_node, target: new_node_2},
+        {source: clicked_node, target: new_node_3});
+      // links.push({source: clicked_node, target: new_node})
+
+      // Add 'clicked' class to node just clicked
+      var current_classes = $('#'+id_clicked).attr('class')
+      var new_classes = current_classes + ' clicked'
+      $('#'+id_clicked).attr('class', new_classes)
+
+      // Recalculate
+      make_nodes_NOT_clickable();
+      start();
+
+  })
+}
+
+
+
+var width = 960,
+    height = 500;
+
+var nodes = [],
+    links = [];
+
+var force = d3.layout.force()
+    .nodes(nodes)
+    .links(links)
+    .charge(-1200)  // Set to high value like -1600
+    //.linkStrength(1)
+    .friction(0.7)
+    .linkDistance(100)
+    //.gravity(0.05)
+    //.theta(0)
+    //.alpha(0)
+    .size([width, height])
+    .on("tick", tick);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+var node = svg.selectAll(".node"),
+    link = svg.selectAll(".link");
+
+// First of all, add initial node
+setTimeout(function() {
+  var a = {id: "a", headline:'This is a headline', strapline:'The strapline data goes here too'};
+  nodes.push(a);
+  links.push();
+  start();
+}, 0);
+
+
+function start() {
+  link = link.data(force.links(),function(d) { return d.source.id + "-" + d.target.id; });
+  link
+    .enter()
+    .insert("line", "g")
+    .attr("class", "link");
+  link.exit().remove();
+
+  node = node.data(force.nodes(), function(d) { return d.id;});
+  node
+    .enter()
+    .append('g')
+    .attr('class','circle_group')
+    .append("circle")
+    .attr("class", function(d) { return "node " + d.id })
+    .attr("id", function(d) { return d.id; })
+    // .attr("headline", function(d) { return d.headline; })
+    // .attr("strapline", function(d) { return d.strapline; })
+    // .attr('fill', 'orange')
+    .attr("r", 16)
+    .call(force.drag);
+
+  node   
+    .enter()
+    .append('g')
+    .attr('class','label_group')     
+    .append('text')
+    .attr("dx", 12)
+    .attr("dy", ".35em")
+    .attr("font-size", "10pt")
+    .text(function(d) { return d.headline });
+
+  node.exit().remove();
+
+  force.start();
+  make_nodes_clickable()
+  make_nodes_hoverable()
+
+}
+
+function tick() {
+  svg
+    .selectAll('.node')
+    .attr("cx", function(d) { return d.x; })
+    .attr("cy", function(d) { return d.y; })
+
+  svg
+    .selectAll('text')
+    .attr("x", function(d) { return d.x+10; })
+    .attr("y", function(d) { return d.y; })
+
+  link
+    .attr("x1", function(d) { return d.source.x; })
+    .attr("y1", function(d) { return d.source.y; })
+    .attr("x2", function(d) { return d.target.x; })
+    .attr("y2", function(d) { return d.target.y; });
+}
+
+</script>
