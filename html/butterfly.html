@@ -1,51 +1,62 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="Visualising Guardian news articles experiment">
+      <meta name="author" content="David Abelman">
+      <link rel="icon" href="../../favicon.ico">
 
-<!-- See original script at http://bl.ocks.org/mbostock/1095795 -->
+      <title>Butterfly effect</title>
+      <!-- Bootstrap core CSS -->
+      <link href="css/bootstrap.min.css" rel="stylesheet">
 
-<style>
+      <!-- Custom styles for this template -->
+      <link href="css/butterfly.css" rel="stylesheet">
 
-.link {
-  stroke: #000;
-  stroke-width: 1.5px;
-}
+      <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+      <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+      <![endif]-->
 
-.node {
-  fill: #f00;
-  stroke: #f00;
-  stroke-width: 1.5px;
-}
-.node:hover {
-  fill: #f44;
-  stroke: #f44;
-  stroke-width: 6.5px;
-  cursor: copy;
-}
-
-.clicked {
-  fill: #999;
-  stroke: #999;
-  stroke-width: 1.5px;
-}
-
-.clicked:hover {
-  fill: #bbb;
-  stroke: #bbb;
-  stroke-width: 6.5px;
-  cursor: initial;
-}
-
-
-
-</style>
-
-<h3 id='headline'>HEADLINE...</h3>
-<p id='strapline'>strapline...</p>
+      <!--script src="//code.jquery.com/jquery-1.11.0.min.js"></script-->
+      <script src="js/jquery-2.1.1.min.js"></script>
+      <script type="text/javascript" src="d3/d3.v3.js"></script>
+      
+      <!-- See original script at http://bl.ocks.org/mbostock/1095795 -->
+  </head>
 
 <body>
-<!-- <script src="http://d3js.org/d3.v3.min.js"></script> -->
-<script src="d3/d3.v3.js"></script>
-<script src="js/jquery-2.1.1.min.js"></script>
+
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="visualisation_index.html">Guardian news visualisations</a>
+          </div>
+          <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="visualisation_index.html">Other visualisations</a></li>
+              <li><a id='about_link' href="#">About this visualisation</a></li>
+              <!-- <li><a href="#options" class="options-link">Options</a></li> -->
+              <li><a href="http://www.davidabelman.co.uk" target="_blank">David Abelman</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+  <h3 id='headline'>HEADLINE...</h3>
+  <p id='strapline'>strapline...</p>
+
 <script>
 
 COUNT = 0
@@ -111,11 +122,26 @@ function make_nodes_clickable() {
       
       // Create a new nodes based on AJAX call (TODO)
       COUNT += 1
-      var new_node = {id: String(COUNT), headline:'This is a headline'+String(COUNT), strapline:'The strapline data goes here too'}    
+      var new_node = {id: String(COUNT),
+                      headline:'Vietnam awarded top country'+String(COUNT),
+                      strapline:'The strapline data goes here too',
+                      date:'3 Jun 2013',
+                      date_difference:'+4 days'
+                    }    
       COUNT += 1
-      var new_node_2 = {id: String(COUNT), headline:'This is a headline'+String(COUNT), strapline:'The strapline data goes here too'}  
+      var new_node_2 = {id: String(COUNT), 
+                      headline:'China enters waters'+String(COUNT),
+                      strapline:'The strapline data goes here too',
+                      date:'6 Jun 2013',
+                      date_difference:'+2 days'
+                    }  
       COUNT += 1
-      var new_node_3 = {id: String(COUNT), headline:'This is a headline'+String(COUNT), strapline:'The strapline data goes here too'}    
+      var new_node_3 = {id: String(COUNT),
+                      headline:'Yen down against Dong'+String(COUNT),
+                      strapline:'The strapline data goes here too',
+                      date:'1 Jun 2013',
+                      date_difference:'+17 days'
+                    }    
       
       // Add the new node(s) and connect to an old node
       
@@ -144,8 +170,8 @@ function make_nodes_clickable() {
 
 
 
-var width = 960,
-    height = 500;
+var width = 1000,
+    height = 1000;
 
 var nodes = [],
     links = [];
@@ -153,10 +179,10 @@ var nodes = [],
 var force = d3.layout.force()
     .nodes(nodes)
     .links(links)
-    .charge(-1200)  // Set to high value like -1600
+    .charge(-2700)  // Set to high value like -1600
     //.linkStrength(1)
-    .friction(0.7)
-    .linkDistance(100)
+    .friction(0.75)
+    .linkDistance(170)
     //.gravity(0.05)
     //.theta(0)
     //.alpha(0)
@@ -172,7 +198,7 @@ var node = svg.selectAll(".node"),
 
 // First of all, add initial node
 setTimeout(function() {
-  var a = {id: "a", headline:'This is a headline', strapline:'The strapline data goes here too'};
+  var a = {id: "starter", headline:'This is a headline', strapline:'The strapline data goes here too', date:'1 Feb 2012'};
   nodes.push(a);
   links.push();
   start();
@@ -180,36 +206,66 @@ setTimeout(function() {
 
 
 function start() {
+  // This loops through data and creates 'g' groups for all added elements on each iteration of the code
+
+  // Links and link labels
   link = link.data(force.links(),function(d) { return d.source.id + "-" + d.target.id; });
+
+  // Link labels
   link
     .enter()
-    .insert("line", "g")
-    .attr("class", "link");
-  link.exit().remove();
-
-  node = node.data(force.nodes(), function(d) { return d.id;});
-  node
+    .append('g')
+    .attr('class','link_label_group')  
+    .append('text')
+    .attr("dx", 12)
+    .attr("dy", ".35em")  
+    .attr('class', 'link_label')  
+    .attr("font-size", "8pt")    
+    .text(function(d){return d.target.date_difference});
+  
+  // Links
+  link
     .enter()
     .append('g')
-    .attr('class','circle_group')
-    .append("circle")
-    .attr("class", function(d) { return "node " + d.id })
-    .attr("id", function(d) { return d.id; })
-    // .attr("headline", function(d) { return d.headline; })
-    // .attr("strapline", function(d) { return d.strapline; })
-    // .attr('fill', 'orange')
-    .attr("r", 16)
-    .call(force.drag);
+    .attr('class', 'link_group')
+    .insert("line", "g")
+    .attr("class", "link");
 
+  link.exit().remove();
+
+  // Nodes and node labels
+  node = node.data(force.nodes(), function(d) { return d.id;});
+
+  // Node labels
   node   
     .enter()
     .append('g')
-    .attr('class','label_group')     
+    .attr('class','node_label_group')     
     .append('text')
-    .attr("dx", 12)
-    .attr("dy", ".35em")
+    .attr('class', 'node_label') 
     .attr("font-size", "10pt")
     .text(function(d) { return d.headline });
+
+  // Node labels
+  node   
+    .enter()
+    .append('g')
+    .attr('class','node_label_group')     
+    .append('text')
+    .attr('class', 'node_date') 
+    .attr("font-size", "8pt")
+    .text(function(d) { return d.date });
+
+  // Nodes
+  node
+    .enter()
+    .append('g')
+    .attr('class','node_group')
+    .append("circle")
+    .attr("class", function(d) { return "node"})
+    .attr("id", function(d) { return d.id; })    
+    .attr("r", 16)
+    .call(force.drag);
 
   node.exit().remove();
 
@@ -220,21 +276,38 @@ function start() {
 }
 
 function tick() {
+  // This runs on every tick of the animation, moving around the positions of nodes/text etc.
+  // Node positions
   svg
     .selectAll('.node')
     .attr("cx", function(d) { return d.x; })
     .attr("cy", function(d) { return d.y; })
 
+  // Node label positions
   svg
-    .selectAll('text')
-    .attr("x", function(d) { return d.x+10; })
-    .attr("y", function(d) { return d.y; })
+    .selectAll('.node_label')
+    .attr("x", function(d) { return d.x+19; })
+    .attr("y", function(d) { return d.y+9; })
 
-  link
+  // Node date label positions
+  svg
+    .selectAll('.node_date')
+    .attr("x", function(d) { return d.x+19; })
+    .attr("y", function(d) { return d.y-4; })
+
+  // Line positions
+  svg
+    .selectAll('.link')
     .attr("x1", function(d) { return d.source.x; })
     .attr("y1", function(d) { return d.source.y; })
     .attr("x2", function(d) { return d.target.x; })
     .attr("y2", function(d) { return d.target.y; });
+
+  // Line label positions
+  svg
+    .selectAll('.link_label')
+    .attr("x", function(d) { return ((d.source.x+d.target.x)/2)-5; })
+    .attr("y", function(d) { return (d.source.y+d.target.y)/2; })
 }
 
 </script>
