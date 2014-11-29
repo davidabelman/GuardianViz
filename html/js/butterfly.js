@@ -52,7 +52,7 @@ function make_nodes_clickable() {
       // Set force charge and friction
       // Initialsed previously with weak charge to avoid bouncing off screen
         setTimeout( function() {
-          force.charge(-3000).friction(0.7)
+          force.charge(-3000).friction(0.7).linkDistance(170)
         },1000)
       
 
@@ -103,43 +103,6 @@ function make_nodes_clickable() {
       start();
   })
 }
-
-
-// *********** Run on script start ***********
-// SVG height an width
-var width = $(window).width()*1.05,
-    height = $(window).height()*1.05;
-
-var nodes = [],
-    links = [];
-
-// Set physics options
-var force = d3.layout.force()
-      .nodes(nodes)
-      .links(links)
-      .charge(-170)
-      .friction(0.4)
-      .linkDistance(170)
-      .size([width, height])
-      .on("tick", tick);
-
-// Create SVG
-var svg = d3.select("#butterfly_pane").append("svg")
-    .attr("width", width)
-    .attr("height", height);
-
-var node = svg.selectAll(".node"),
-    link = svg.selectAll(".link");
-
-// First of all, add initial node
-var a = {id: "starter",
-        headline:'This is a headline',
-        strapline:'The strapline data goes here too',
-        date:'1 Feb 2012'};
-nodes.push(a);
-links.push();
-start();
-// var force = set_force_parameters(charge=-2800, friction=0.7)
 
 
 function start() {
@@ -255,4 +218,42 @@ function tick() {
     .attr("x", function(d) { return ((d.source.x+d.target.x)/2)-5; })
     .attr("y", function(d) { return (d.source.y+d.target.y)/2; })
 }
+
+
+
+// *********** Run on script start ***********
+// SVG height an width
+var width = $(window).width()*1.05,
+    height = $(window).height()*1.05;
+
+var nodes = [],
+    links = [];
+
+// Set physics options
+var force = d3.layout.force()
+      .nodes(nodes)
+      .links(links)
+      .charge(-170)
+      .friction(0.4)
+      .linkDistance(220)
+      .size([width, height])
+      .on("tick", tick);
+
+// Create SVG
+var svg = d3.select("#butterfly_pane").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+var node = svg.selectAll(".node"),
+    link = svg.selectAll(".link");
+
+// First of all, add initial node
+var a = {id: "starter",
+        headline:'This is a headline',
+        strapline:'The strapline data goes here too',
+        date:'1 Feb 2012'};
+nodes.push(a);
+links.push();
+start();
+
 
