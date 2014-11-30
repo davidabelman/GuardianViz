@@ -1,4 +1,5 @@
 COUNT = 0
+ITERATION = 0
 
 function make_nodes_hoverable(hoverout) {
   // This is run at each iteration (i.e. when new nodes are added)
@@ -108,6 +109,7 @@ function make_nodes_clickable() {
 function start() {
   // This loops through data and creates 'g' groups for all added elements on each iteration of the code
   // Also alters formatting and SVG size
+  ITERATION+=1
 
   // Increase size of SVG by 5% on each run through, just to allow more room for network
   height = height*1.05
@@ -148,6 +150,19 @@ function start() {
   node = node.data(force.nodes(), function(d) { return d.id;});
 
   // Node labels
+  if (ITERATION==1) {
+  // First iteration, make the label blue by adding #starter_label ID
+  node   
+    .enter()
+    .append('g')
+    .attr('class','node_label_group')     
+    .append('text')
+    .attr('class', 'node_label fresh_node_label') 
+    .attr('id', 'starter_label')
+    .text(function(d) { return d.headline });
+  }
+  else {
+  // Other iterations, don't add ID of #starter_label
   node   
     .enter()
     .append('g')
@@ -155,6 +170,7 @@ function start() {
     .append('text')
     .attr('class', 'node_label fresh_node_label') 
     .text(function(d) { return d.headline });
+  }
 
   // Node labels (dates)
   node   
@@ -187,36 +203,40 @@ function start() {
 function tick() {
   // This runs on every tick of the animation, moving around the positions of nodes/text etc.
   // Node positions
+  var shift_x = ITERATION*10
+  var shift_y = ITERATION*20
+
+
   svg
     .selectAll('.node')
-    .attr("cx", function(d) { return d.x; })
-    .attr("cy", function(d) { return d.y; })
+    .attr("cx", function(d) { return d.x + shift_x; })
+    .attr("cy", function(d) { return d.y + shift_y; })
 
   // Node label positions
   svg
     .selectAll('.node_label')
-    .attr("x", function(d) { return d.x+19; })
-    .attr("y", function(d) { return d.y+9; })
+    .attr("x", function(d) { return d.x+19 + shift_x; })
+    .attr("y", function(d) { return d.y+9 + shift_y; })
 
   // Node date label positions
   svg
     .selectAll('.node_date')
-    .attr("x", function(d) { return d.x+19; })
-    .attr("y", function(d) { return d.y-4; })
+    .attr("x", function(d) { return d.x+19 + shift_x; })
+    .attr("y", function(d) { return d.y-4 + shift_y; })
 
   // Line positions
   svg
     .selectAll('.link')
-    .attr("x1", function(d) { return d.source.x; })
-    .attr("y1", function(d) { return d.source.y; })
-    .attr("x2", function(d) { return d.target.x; })
-    .attr("y2", function(d) { return d.target.y; });
+    .attr("x1", function(d) { return d.source.x + shift_x; })
+    .attr("y1", function(d) { return d.source.y + shift_y; })
+    .attr("x2", function(d) { return d.target.x + shift_x; })
+    .attr("y2", function(d) { return d.target.y + shift_y; });
 
   // Line label positions
   svg
     .selectAll('.link_label')
-    .attr("x", function(d) { return ((d.source.x+d.target.x)/2)-5; })
-    .attr("y", function(d) { return (d.source.y+d.target.y)/2; })
+    .attr("x", function(d) { return ((d.source.x+d.target.x)/2)-5 + shift_x; })
+    .attr("y", function(d) { return (d.source.y+d.target.y)/2 + shift_y; })
 }
 
 

@@ -71,3 +71,7 @@
   font-style: italic;
   fill: #999;
 }
+
+#starter_label {
+  fill: blue;
+}
