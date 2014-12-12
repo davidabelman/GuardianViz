@@ -6,37 +6,38 @@ from general_functions import *
 
 # Paths
 path_choice = {
-	'all' : "data/articles.p",
-	'uk' : "data/articles_uk.p",
-	'uk_1_wk' : "data/articles_uk_1_wk.p",
-	'sample' : "data/articles_subset.p",
+	'all' : "../open/data/articles.p",
+	'uk' : "../open/data/articles_uk.p",
+	'uk_1_wk' : "../open/data/articles_uk_1_wk.p",
+	'sample' : "../open/data/articles_subset.p",
 }
 current_articles_path = path_choice [ 'all' ]
 current_articles_path_cosine_similarites = current_articles_path[0:-2]+'_cosine_similarities.p'
+current_articles_path_butterzip = current_articles_path[0:-2]+'_butterzip.p'
 
 # Datetime for crawl
-crawl_start_datetime = datetime.datetime(2014,7,22)  # Inclusive of this date!
-crawl_end_datetime = datetime.datetime(2014,7,27)  # Inclusive of this date!
+crawl_start_datetime = datetime.datetime(2014,1,01)  # Inclusive of this date!
+crawl_end_datetime = datetime.datetime(2014,10,31)  # Inclusive of this date!
 
 # Raw data from Guardian
-raw_pickle_path = "data/world_data.p"
+raw_pickle_path = "../open/data/world_data.p"
 main_guardian_crawl_min_wait = 5
-main_guardian_crawl_max_wait = 8
+main_guardian_crawl_max_wait = 9
 
 # Main guardian crawl wrangle
 overwrite_articles = True
 find_internal_links = False  # This slows things down a lot, therefore can toggle off if not being used
 
 # Raw data from Facebook
-facebook_stats_path = "data/fb.p"
-facebook_crawl_wait = 0.5
+facebook_stats_path = "../open/data/fb.p"
+facebook_crawl_wait = 1.5
 facebook_crawl_tag_filter = 'World news'  # e.g. 'UK news'
 
 # Raw data on Guardian links
-guardian_links_path = "data/guardian_links.p"
+guardian_links_path = "../open/data/guardian_links.p"
 guardian_links_crawl_tag_filter = 'UK news'  # e.g. 'UK news'
-guardian_link_crawl_min_wait = 1
-guardian_link_crawl_max_wait = 5
+guardian_link_crawl_min_wait = 2
+guardian_link_crawl_max_wait = 6
 
 # Creating subsets
 articles_subset_size = 500

@@ -27,7 +27,7 @@ guardian_links = load_pickle(options.guardian_links_path)
 
 # Set up the parameters
 main = "http://beta.content.guardianapis.com/"
-api_key = "api-key=explorer"
+api_key = "api-key=uu4qhyqqknrkhrsmahfwr2qs"
 show_story_package = "show-story-package=true"
 show_related = "show-related=true"
 show_most_viewed = "show-most-viewed=true"

@@ -84,22 +84,23 @@ for a in articles:
 # Save pickle before exit
 save_pickle(fb, options.facebook_stats_path)
 
-# Optional: Normalise all FB share data for old articles (older articles will have more shares as not collected at 3 day point)
-fb_share_rate_data = {}
-for a in fb:
-	days = fb[a]['days']
-	total = fb[a]['fb_total']
-	if days not in fb_share_rate_data:
-		fb_share_rate_data[days] = [ 1, total, 'to_be_replaced' ]
-	else:
-		fb_share_rate_data[days][0] += 1
-		fb_share_rate_data[days][1] += total
+if False:
+	# Optional: Normalise all FB share data for old articles (older articles will have more shares as not collected at 3 day point)
+	fb_share_rate_data = {}
+	for a in fb:
+		days = fb[a]['days']
+		total = fb[a]['fb_total']
+		if days not in fb_share_rate_data:
+			fb_share_rate_data[days] = [ 1, total, 'to_be_replaced' ]
+		else:
+			fb_share_rate_data[days][0] += 1
+			fb_share_rate_data[days][1] += total
 
-# Loop through days and work out average
-for d in fb_share_rate_data:
-	fb_share_rate_data[d][2] = fb_share_rate_data[d][1]*1.0/fb_share_rate_data[d][0]
+	# Loop through days and work out average
+	for d in fb_share_rate_data:
+		fb_share_rate_data[d][2] = fb_share_rate_data[d][1]*1.0/fb_share_rate_data[d][0]
 
-for i in range(10):
-	if i in fb_share_rate_data:
-		print "On Day %s we have an average of %s shares..." %(i, fb_share_rate_data[i][2])
-print "(Need to make the call whether we should normalise share data out. Currently not.)"
+	for i in range(10):
+		if i in fb_share_rate_data:
+			print "On Day %s we have an average of %s shares..." %(i, fb_share_rate_data[i][2])
+	print "(Need to make the call whether we should normalise share data out. Currently not.)"

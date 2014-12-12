@@ -57,7 +57,7 @@ data_pickle_path = options.raw_pickle_path
 
 # Set up the parameters
 main = "http://beta.content.guardianapis.com/world?"
-api_key = "api-key=explorer"
+api_key = "api-key=uu4qhyqqknrkhrsmahfwr2qs"
 from_date = "from-date="+convert_datetime_to_str(options.crawl_start_datetime)
 to_date = "to-date="+convert_datetime_to_str(options.crawl_end_datetime)
 use_date = "use-date=published"
@@ -90,7 +90,7 @@ total_pages = how_many_pages()
 data_store = load_pickle(data_pickle_path)
 
 counter = 0
-#for i in range(total_pages):
+
 for i in range(total_pages):
 
 	# Sleep for random time

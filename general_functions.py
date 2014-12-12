@@ -111,6 +111,7 @@ def print_current_status():
 	Print current status on path defined by options.current_articles_path
 	"""
 	import options	
+	reload(options)
 	print "======"
 	print "Status for %s" %options.current_articles_path
 	print "======"
