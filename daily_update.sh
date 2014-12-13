@@ -10,7 +10,7 @@ RUNNING ALL DAILY UPDATES:
 echo "\n=======================
 Crawling Guardian site:
 ======================="
-python guardian_main_crawl.py
+# python guardian_main_crawl.py
 
 echo "\n=======================
 Wrangling Guardian data:
@@ -76,9 +76,16 @@ echo "\n=======================
 Git add/commit/push to Github and Heroku:
 ======================="
 git add .
-git commit -m "Automatic daily update"
+git commit -m "Automatic daily update (open)"
 git push origin master
 git push heroku master
+
+cd ../flask
+git add .
+git commit -m "Automatic daily update (flask)"
+git push origin master
+git push heroku master
+
 
 echo "\n=======================
 Finished - exiting.
