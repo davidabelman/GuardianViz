@@ -7,28 +7,28 @@ RUNNING ALL DAILY UPDATES:
 
 # ============================== GENERAL CRAWLING ==============================
 #Run crawl modules
-# echo "\n=======================
-# Crawling Guardian site:
-# ======================="
-# python guardian_main_crawl.py
+echo "\n=======================
+Crawling Guardian site:
+======================="
+python guardian_main_crawl.py
 
-# echo "\n=======================
-# Wrangling Guardian data:
-# ======================="
-# python guardian_main_wrangle.py
+echo "\n=======================
+Wrangling Guardian data:
+======================="
+python guardian_main_wrangle.py
 
 # Can run the following for any date range
 # and with any tag filter at any time.
 # Will only pull articles not already dealt with.
-# echo "\n=======================
-# Crawling Facebook data:
-# ======================="
-# python facebook_crawl.py
+echo "\n=======================
+Crawling Facebook data:
+======================="
+python facebook_crawl.py
 
-# echo "\n=======================
-# Wrangling Facebook data:
-# ======================="
-# python facebook_wrangle.py
+echo "\n=======================
+Wrangling Facebook data:
+======================="
+python facebook_wrangle.py
 
 # Can run the following for any date range
 # and with any tag filter at any time.
@@ -72,14 +72,14 @@ python ../flask/butterfly_main.py incremental
 
 # ============================== PUSH TO GIT/HEROKU ==============================
 
-# echo "\n=======================
-# Git add/commit/push to Github and Heroku:
-# ======================="
-# git add .
-# git commit -m "Automatic daily update"
-# git push origin master
-# git push heroku master
+echo "\n=======================
+Git add/commit/push to Github and Heroku:
+======================="
+git add .
+git commit -m "Automatic daily update"
+git push origin master
+git push heroku master
 
-# echo "\n=======================
-# Finished - exiting.
-# ======================="
+echo "\n=======================
+Finished - exiting.
+======================="

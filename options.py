@@ -16,13 +16,13 @@ current_articles_path_cosine_similarites = current_articles_path[0:-2]+'_cosine_
 current_articles_path_butterzip = current_articles_path[0:-2]+'_butterzip.p'
 
 # Datetime for crawl
-crawl_start_datetime = datetime.datetime(2014,1,01)  # Inclusive of this date!
-crawl_end_datetime = datetime.datetime(2014,10,31)  # Inclusive of this date!
+crawl_start_datetime = datetime.datetime(2014,11,01)  # Inclusive of this date!
+crawl_end_datetime = datetime.datetime(2014,11,30)  # Inclusive of this date!  latest done: (2014,10,31) earliest done fb: (2013,01,01)
 
 # Raw data from Guardian
 raw_pickle_path = "../open/data/world_data.p"
-main_guardian_crawl_min_wait = 5
-main_guardian_crawl_max_wait = 9
+main_guardian_crawl_min_wait = 2
+main_guardian_crawl_max_wait = 6
 
 # Main guardian crawl wrangle
 overwrite_articles = True
@@ -30,8 +30,8 @@ find_internal_links = False  # This slows things down a lot, therefore can toggl
 
 # Raw data from Facebook
 facebook_stats_path = "../open/data/fb.p"
-facebook_crawl_wait = 1.5
-facebook_crawl_tag_filter = 'World news'  # e.g. 'UK news'
+facebook_crawl_wait = 0.1
+facebook_crawl_tag_filter = 'World news'  # e.g. 'UK news' or 'World news'
 
 # Raw data on Guardian links
 guardian_links_path = "../open/data/guardian_links.p"
