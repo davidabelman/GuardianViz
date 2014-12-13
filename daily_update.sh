@@ -15,7 +15,7 @@ Crawling Guardian site:
 echo "\n=======================
 Wrangling Guardian data:
 ======================="
-python guardian_main_wrangle.py
+# python guardian_main_wrangle.py
 
 # Can run the following for any date range
 # and with any tag filter at any time.
@@ -66,7 +66,7 @@ python facebook_wrangle.py
 echo "\n=======================
 Calculating data for Butterfly Effect visualisation:
 ======================="
-python ../flask/butterfly_main.py incremental
+python ../flask/butterfly_main.py fresh
 
 
 
@@ -78,7 +78,7 @@ Git add/commit/push to Github and Heroku:
 git add .
 git commit -m "Automatic daily update (open)"
 git push origin master
-git push heroku master
+# git push heroku master
 
 cd ../flask
 git add .

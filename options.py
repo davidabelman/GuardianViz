@@ -16,8 +16,8 @@ current_articles_path_cosine_similarites = current_articles_path[0:-2]+'_cosine_
 current_articles_path_butterzip = current_articles_path[0:-2]+'_butterzip.p'
 
 # Datetime for crawl
-crawl_start_datetime = datetime.datetime(2014,11,01)  # Inclusive of this date!
-crawl_end_datetime = datetime.datetime(2014,11,30)  # Inclusive of this date!  latest done: (2014,10,31) earliest done fb: (2013,01,01)
+crawl_start_datetime = datetime.datetime(2012,01,01)  # Inclusive of this date!
+crawl_end_datetime = datetime.datetime(2012,12,31)  # Inclusive of this date!  latest done: (2014,11,30) earliest done fb: (2012,01,01)
 
 # Raw data from Guardian
 raw_pickle_path = "../open/data/world_data.p"
