@@ -1,5 +1,12 @@
 #!/bin/sh
 
+# This file should be run from Terminal as:
+# sh daily_update.sh
+# It looks in options.py for date range for crawl (crawl_start_datetime, crawl_end_datetime)
+# You should set these dates manually in the file
+# It then pulls Guardian data, Guardian link data, and Facebook data for these dates
+# It carries out calculations etc for 2D grid and butterfly effect, and uploads to Heroku
+
 clear
 echo "\n======================================
 RUNNING ALL DAILY UPDATES:
@@ -66,7 +73,7 @@ python facebook_wrangle.py
 echo "\n=======================
 Calculating data for Butterfly Effect visualisation:
 ======================="
-python ../flask/butterfly_main.py fresh
+python ../flask/butterfly_main.py incremental
 
 
 

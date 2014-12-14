@@ -201,7 +201,7 @@ articles_main = load_pickle("data/articles.p")
 
 # Go through combinations of articles to extract
 tags = {'uk':'UK news', 'world':'World news'}
-for day_range in [2,7,30]:
+for day_range in [3,7,30]:
 	now = datetime.datetime.now() #datetime.datetime(2014,6,30)
 	end_date = now
 	start_date = now-datetime.timedelta(days=day_range)
@@ -214,8 +214,8 @@ for day_range in [2,7,30]:
 		# Create grid
 		try:
 			grid = calculate_grid(article_set)
-			# Write to a JSON file
-			path = 'html/json/grid/%s_%s.json' %(tag, day_range)
+			# Write to a JSON file in flask app
+			path = '../flask/static/json/grid/%s_%s.json' %(tag, day_range)
 			export_dict_to_json(grid, path)
 		except:
 			print "Could not create dictionary. Tag = %s, Day range = %s. If small number of days likely due to too few articles. Not overwriting old file." %(tag, day_range)
