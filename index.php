@@ -1,1 +1,0 @@
-<?php include_once("html/visualisation_index.html"); ?>

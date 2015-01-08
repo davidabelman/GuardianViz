@@ -19,7 +19,7 @@ import datetime
 from general_functions import *
 
 
-articles = load_pickle("data/articles.p")
+articles = load_pickle(options.current_articles_path)
 guardian_links = load_pickle(options.guardian_links_path)
 
 # Will look something like this:
@@ -75,7 +75,7 @@ for a in articles:
 			# Add data to pickle
 			guardian_links.append(article_data)
 			counter+=1
-			if counter%5==0:
+			if counter%10==0:
 				save_pickle ( guardian_links, options.guardian_links_path )
 
 			# Sleep for X seconds

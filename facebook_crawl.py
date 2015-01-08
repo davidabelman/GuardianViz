@@ -6,6 +6,8 @@ import options
 reload(options)
 from general_functions import *
 import datetime
+import urllib2
+
 
 # https://graph.facebook.com/fql?q=select%20%20total_count%20from%20link_stat%20where%20url=%22http://www.theguardian.com/sport/2014/jul/06/novak-djokovic-wins-wimbledon-title-roger-federer%22
 
@@ -13,14 +15,13 @@ def get_facebook_likes(article_id):
 	"""
 	Returns the current number of FB likes for an article (sleeps after request, set time in options)
 	"""
-	import urllib2
 	import json
 	import time
+	import sys
 
 	# Generate FQL request
 	url = 'http://www.theguardian.com/'+article_id
 	request = 'https://graph.facebook.com/fql?q=select%20total_count%20from%20link_stat%20where%20url=%22'+url+'%22'
-	print request
 	print "Generated the following request: %s" %(request)
 
 	# Get the response
@@ -71,12 +72,18 @@ for a in articles:
 		
 		if tag_filter in articles[a]['tags'] and articles[a]['date']>=start_date and articles[a]['date']<=end_date:
 			likes = get_facebook_likes(a)
+			if likes == "Unknown (failed request)":
+				# Exit if failed to pull FB data
+				save_pickle(fb, options.facebook_stats_path)
+				import sys
+				sys.exit("EXITING DUE TO FACEBOOK CRAWL ERROR.")
+			# Providing we pulled data OK...
 			fb[a] = {'days':article_age, 'fb_total':likes}
 			count+=1
-			print "We have pulled %s/%s pages." %(count,total_counter)
+			print "We have pulled %s/%s pages.\n" %(count,total_counter)
 			
-			# Save pickle every 10 requests
-			if count%10 == 0:
+			# Save pickle every 30 requests
+			if count%30 == 0:
 				save_pickle(fb, options.facebook_stats_path)
 			
 

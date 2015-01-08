@@ -112,7 +112,7 @@ for i in range(total_pages):
 	# Add data to pickle
 	data_store.append(page_data)
 	counter += 1
-	if counter%5==0:
+	if counter%30==0:
 		save_pickle ( data_store, data_pickle_path )
 
 save_pickle ( data_store, data_pickle_path )

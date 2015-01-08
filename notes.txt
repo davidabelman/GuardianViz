@@ -1,7 +1,9 @@
 TODOS
 ================
 Create virtualenv
+
 Add stemming to tf-idf
+
 Create SOM (b) just by connecting all with all and playing with settings in Gephi
 Create test to measure recall of TF-IDF vs. related content / story bunches so I can assess how well TF-IDF is doing
 
@@ -26,7 +28,6 @@ http://dataaddict.fr/prenoms/#alain,amadou,anis,amine,alice,gerard,ghislain,habi
 Newsreader project
 http://www.lrec-conf.org/proceedings/lrec2014/pdf/645_Paper.pdf
 
-
 Create an API for use in web project. Commands:
 Get related story (parameter = past/future, parameter = 1 day, 1 week, 1 month, 1 year, 10 years) --> finds most relevant/significant story in time range (may need to look for peaks in news, and pick best article or first article within the peak)
 Split story history (parameter??=number of clusters to split into) --> splits the story into 2 (or N?) clusters of historical stories (and finds the big one within each of these using get related story(?))
@@ -35,7 +36,4 @@ Optional parameter for the above would be a keyword/tag added by the user, to gu
 
 Log of all crawled:
 ===================
-Aug 2012 - 12th July 2014:
-guardian --> world
-guardian_links --> world (tag = UK news)
-facebook_total --> world (tag = UK news), 1Jun-12Jul all
+2012-2014: All Guardian data and Facebook data (not Guardian link data, as not used within 2D grid or Butterfly effect)

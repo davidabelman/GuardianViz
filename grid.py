@@ -197,7 +197,7 @@ def calculate_grid(articles):
 
 	
 # Load articles
-articles_main = load_pickle("data/articles.p")
+articles_main = load_pickle(options.current_articles_path)
 
 # Go through combinations of articles to extract
 tags = {'uk':'UK news', 'world':'World news'}
