@@ -13,6 +13,7 @@ To print status on articles collected, see general_functions.print_current_statu
 
 To run the daily script, run:
 >> sh daily_update.sh
+
 It looks in options.py for date range for crawl (crawl_start_datetime, crawl_end_datetime). You should set these dates manually in the file. It then pulls Guardian data, Guardian link data, and Facebook data for these dates. It carries out calculations etc for 2D grid and butterfly effect, and uploads to Heroku.
 
 Possible to run any of the following commands individually (these are what make up the daily update). Note that all data between stages is saved in the directory '/data' (which is not loaded to the git repo). Once again, date parameters must be altered within the 'options.py' file.
