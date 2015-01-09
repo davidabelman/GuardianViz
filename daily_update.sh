@@ -18,12 +18,12 @@ RUNNING ALL DAILY UPDATES:
 echo "\n=======================
 Crawling Guardian site:
 ======================="
-#python guardian_main_crawl.py
+python guardian_main_crawl.py
 
 echo "\n=======================
 Wrangling Guardian data:
 ======================="
-#python guardian_main_wrangle.py
+python guardian_main_wrangle.py
 
 # Can run the following for any date range
 # and with any tag filter at any time.
@@ -31,12 +31,12 @@ Wrangling Guardian data:
 echo "\n=======================
 Crawling Facebook data:
 ======================="
-#python facebook_crawl.py
+python facebook_crawl.py
 
 echo "\n=======================
 Wrangling Facebook data:
 ======================="
-#python facebook_wrangle.py
+python facebook_wrangle.py
 
 # Can run the following for any date range
 # and with any tag filter at any time.
@@ -45,12 +45,12 @@ Wrangling Facebook data:
 echo "\n=======================
 Crawling Guardian link data:
 ======================="
-#python guardian_link_crawl.py
+python guardian_link_crawl.py
 
 echo "\n=======================
 Wrangling Guardian link data:
 ======================="
-#python guardian_link_wrangle.py
+python guardian_link_wrangle.py
 
 # ============================== 2D GRID CALCULATIONS ==============================
 # Run algorithms
@@ -61,10 +61,10 @@ Wrangling Guardian link data:
 # python tf_idf_scikit.py
 
 # Create output
-# echo "\n=======================
-# Creating HTML grid output:
-# ======================="
-# python grid.py
+echo "\n=======================
+Creating HTML grid output:
+======================="
+python grid.py
 
 
 # ============================== BUTTERFLY EFFECT CALCS ==============================
@@ -83,15 +83,15 @@ python ../flask/butterfly_main.py incremental
 echo "\n=======================
 Git add/commit/push to Github and Heroku:
 ======================="
-# git add .
-# git commit -m "Automatic daily update (open)"
-# git push origin master
+git add .
+git commit -m "Automatic daily update (open)"
+git push origin master
 
-# cd ../flask
-# git add .
-# git commit -m "Automatic daily update (flask)"
-# git push origin master
-# git push heroku master
+cd ../flask
+git add .
+git commit -m "Automatic daily update (flask)"
+git push origin master
+git push heroku master
 
 
 echo "\n=======================
