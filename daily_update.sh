@@ -83,15 +83,15 @@ python ../flask/butterfly_main.py incremental
 echo "\n=======================
 Git add/commit/push to Github and Heroku:
 ======================="
-git add .
-git commit -m "Automatic daily update (open)"
-git push origin master
+# git add .
+# git commit -m "Automatic daily update (open)"
+# git push origin master
 
-cd ../flask
-git add .
-git commit -m "Automatic daily update (flask)"
-git push origin master
-git push heroku master
+# cd ../flask
+# git add .
+# git commit -m "Automatic daily update (flask)"
+# git push origin master
+# git push heroku master
 
 
 echo "\n=======================
